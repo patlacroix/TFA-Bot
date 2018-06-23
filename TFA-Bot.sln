@@ -1,0 +1,28 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFA-Bot", "TFA-Bot\TFA-Bot.csproj", "{25609AB4-A77A-4B47-AAB8-B2DB39464A3F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EF294E86-FB98-4572-A47B-6EA774197488}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+		entrypoint.sh = entrypoint.sh
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25609AB4-A77A-4B47-AAB8-B2DB39464A3F}.Debug|x86.ActiveCfg = Debug|x86
+		{25609AB4-A77A-4B47-AAB8-B2DB39464A3F}.Debug|x86.Build.0 = Debug|x86
+		{25609AB4-A77A-4B47-AAB8-B2DB39464A3F}.Release|x86.ActiveCfg = Release|x86
+		{25609AB4-A77A-4B47-AAB8-B2DB39464A3F}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal

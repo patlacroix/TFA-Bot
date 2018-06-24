@@ -182,8 +182,7 @@ namespace TFABot
                 sw.Stop();
                 
                 if(response.ResponseStatus == ResponseStatus.Completed)
-                {
-                    
+                {                    
                     
                    var content = response.Content; // raw content as string
                    
@@ -240,9 +239,7 @@ namespace TFABot
             }
 
         }
-        
-
-        
+       
         
         async public void PingHostAsync()
         {

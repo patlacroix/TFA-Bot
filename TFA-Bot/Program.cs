@@ -68,12 +68,13 @@ namespace TFABot
             AlarmState = EnumAlarmState.On;
             
             BotURL = Environment.GetEnvironmentVariable("BOTURL");
-
+            
             if (String.IsNullOrEmpty(BotURL))
             {
                 Console.WriteLine("'BOTURL' Google Spreadsheet URL missing.");
                 return (int)enumRunState.Error;
             }
+            Console.WriteLine($"URL={BotURL}");
             
             Spreadsheet = new clsSpreadsheet(BotURL);
             Spreadsheet.LoadSettings();

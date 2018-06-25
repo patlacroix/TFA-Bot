@@ -234,7 +234,7 @@ namespace TFABot
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ex.Message");
+                Console.WriteLine(ex.Message);
                 RequestFailCount++;
             }
 

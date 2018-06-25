@@ -60,10 +60,10 @@ namespace TFABot
                 
 				String host = Program.SettingsList["SIP-Host"];
 				String timeout = "30s";
-				String dialplanPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"dialplan.xml");
+				String dialplanPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Data/dialplan.xml");
 
 				String perms = $"{host} -au {username} -ap {password} -l 1 -m 1 -sf {dialplanPath} -timeout {timeout} -s {Number.Replace(" ", "")}";
-				//sipp voiceless.aa.net.uk -au +443333402005 -ap tinydancer -l 1 -m 1 -sf /root/dialplan.xml -timeout 20s -s "+447973665024"
+
 				var tcs = new TaskCompletionSource<bool>();
 
 				var process = new Process

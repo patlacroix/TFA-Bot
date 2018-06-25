@@ -74,6 +74,12 @@
     <Reference Include="websocket-sharp">
       <HintPath>..\packages\WebSocketSharp-NonPreRelease.1.0.0\lib\net35\websocket-sharp.dll</HintPath>
     </Reference>
+    <Reference Include="DSharpPlus.CommandsNext">
+      <HintPath>bin\Debug\DSharpPlus.CommandsNext.dll</HintPath>
+    </Reference>
+    <Reference Include="websocket-sharp">
+      <HintPath>bin\Debug\websocket-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />

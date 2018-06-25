@@ -95,6 +95,7 @@ namespace TFABot.DiscordBot
                 HelpString(sb,command.Item2);
             }
             sb.Append("```");
+            sb.AppendLine(Program.BotURL);
             return sb.ToString();
                 
         }

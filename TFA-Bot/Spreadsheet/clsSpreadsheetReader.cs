@@ -9,7 +9,7 @@ namespace TFABot
 {
     public class clsSpreadsheetReader
     {
-        String URL;
+        public String URL {get; private set;}
         
         
         

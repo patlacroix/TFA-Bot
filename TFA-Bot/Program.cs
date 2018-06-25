@@ -39,7 +39,9 @@ namespace TFABot
         
         static public clsSpreadsheet Spreadsheet;
         static public clsBotClient Bot;
-           
+        
+        static public String BotURL {get; private set;}
+   
         public enum EnumAlarmState { Off, On, Silent }
         
         static public DateTime AlarmOffTime;
@@ -65,7 +67,7 @@ namespace TFABot
         {
             AlarmState = EnumAlarmState.On;
             
-            var BotURL = Environment.GetEnvironmentVariable("BOTURL");
+            BotURL = Environment.GetEnvironmentVariable("BOTURL");
             
             if (String.IsNullOrEmpty(BotURL))
             {

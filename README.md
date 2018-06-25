@@ -9,7 +9,7 @@
 
 #### Getting started
 
-1. Copy this spreadsheet, and fill it in.
+1. Copy this Google spreadsheet, and fill it in.  Follow the instructions on the "Settings" tab.
 https://docs.google.com/spreadsheets/d/19SLbCQLFKpkSaZ88SAmN_Mg8L8M-TkiB67TJD67lNQA/edit?usp=sharing
 
 2. Get a read-only share URL for your spreadsheet. (Dont share it with anyone, but you can invite your members for full read/write access)
@@ -17,13 +17,13 @@ https://docs.google.com/spreadsheets/d/19SLbCQLFKpkSaZ88SAmN_Mg8L8M-TkiB67TJD67l
 3. On your server:
 
 ```
-docker build -t TFA-Bot https://git.factoid.org/TFA/TFA-Bot.git
-docker run --rm -d -e "BOTURL=https://docs.google.com/spreadsheets/d/123456789123456789123456789123456789/edit?usp=sharing" tfa-bot
+docker build -t tfa-bot https://git.factoid.org/TFA/TFA-Bot.git
+docker run --rm -d -e "BOTURL=https://docs.google.com/spreadsheets/d/123456789123456789123456789123456789/edit?usp=sharing" --name bot tfa-bot
 ```
 
 #### Optional SIP Server, for Phone Call alerts
 
-TFA-Bot uses SIPp to make phone calls via a SIP VOIP gateway.  https://github.com/SIPp/sipp
+TFA-Bot uses [SIPp](https://github.com/SIPp/sipp) to make phone calls via a SIP VOIP gateway.
 The supplied dialplan.xml may work for you. It calls any given number until it's answered (or times out).
 Some services may require a custom dialplan, which you can test using the sipp bash command.
 

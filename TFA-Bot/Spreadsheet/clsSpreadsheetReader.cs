@@ -15,7 +15,7 @@ namespace TFABot
         
         public clsSpreadsheetReader(String url)
         {
-                var reg = new Regex(@"^https.*(\w){40,}");
+                var reg = new Regex(@"^https.*[^\/]{40,}");
                 var match = reg.Match(url);
                 URL=match.Value;
         }

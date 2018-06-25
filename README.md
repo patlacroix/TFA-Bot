@@ -5,11 +5,12 @@
 * A server, with Docker for running your Bot on.
 * A Discord Server account.
 * Factom nodes to monitor!
+
 ----
 
 #### Getting started
 
-1. Copy this Google spreadsheet, and fill it in.  Follow the instructions on the "Settings" tab.
+1. Copy this Google spreadsheet, and fill in every sheet tab.  Follow the instructions on the "Settings" tab.
 https://docs.google.com/spreadsheets/d/19SLbCQLFKpkSaZ88SAmN_Mg8L8M-TkiB67TJD67lNQA/edit?usp=sharing
 
 2. Get a read-only share URL for your spreadsheet. (Dont share it with anyone, but you can invite your members for full read/write access)

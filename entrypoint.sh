@@ -1,11 +1,12 @@
 #!/bin/bash
 
 APP_NAME="TFA-Bot.exe"                                                                                                                                                                                                                                                         
-APP_DIR="\app\TFA-Bot\TFA-Bot\bin\Release" 
-BUILD_DIR="\app\TFA-Bot"
+APP_DIR="/app/TFA-Bot/TFA-Bot/bin/Release" 
+BUILD_DIR="/app/TFA-Bot"
 
+[ -z "$BOTURL" ] && echo "BOTURL Google Spreadsheet URL missing" && exit 1;
 
-build()
+function build
 {
     cd $BUILD_DIR
     git pull
@@ -39,7 +40,7 @@ do
         then
           echo "SOFTWARE UPDATE"
           cp -fv $APP_NAME $APP_NAME_previous
-          build()
+          build
         elif [ $exitcode -eq 0 ] #Shutdown
         then
           echo "SHUTDOWN"
@@ -47,7 +48,7 @@ do
         
         if [ $elapsed_seconds -lt 30 ]  #been running for less than 30 seconds
         then
-                sleep 5  # delay to protect against eating the CPU resourses with infinate loop
+                sleep 10  # delay to protect against eating the CPU resourses with infinate loop
         fi
 
         

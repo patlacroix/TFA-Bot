@@ -6,7 +6,6 @@ namespace TFABot.DiscordBot.Commands
 {
     public class clsBotControl : IBotCommand
     {
-    
         public String[] MatchCommand {get; private set;}
         public String[] MatchSubstring {get; private set;}
         public Regex[] MatchRegex {get; private set;}
@@ -59,11 +58,10 @@ namespace TFABot.DiscordBot.Commands
                 return 
 @"bot         
 bot reload\tReload spreadsheet (app settings require a restart).
-bot update\tUpdate to latest bot version.
+bot update\tUpdate to latest bot version (if available).
 bot restart\tRestart bot.
-bot previous\tSwitch back to previous verion (if available).
-bot exit\tStop bot.";
-
+bot previous\tSwitch back to previous version (if available).
+bot exit\tStop bot. (ends docker instance)";
             }
         }        
         

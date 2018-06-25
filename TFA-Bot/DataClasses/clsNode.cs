@@ -19,10 +19,8 @@ namespace TFABot
         
         
         public clsNodeGroup NodeGroup;
-
         
         public uint LatencyLowest { get; private set;}
-
         
         [ASheetColumnHeader(true,"name")]
         public string Name {get;set;}
@@ -32,7 +30,6 @@ namespace TFABot
         public string Host {get;set;}
         [ASheetColumnHeader("monitor")]
         public bool Monitor {get;set;}
-
         
         
         Task HeightTask = null;
@@ -129,11 +126,14 @@ namespace TFABot
            set
            {
              _requestFailCount = value;
-             if (_requestFailCount==0 && AlarmRequestFail!=null)
+             if (_requestFailCount==0)
              {
-                Program.AlarmManager.Clear(AlarmRequestFail,$"CLEARED: {Name} now responding.");
-                AlarmRequestFail = null;
-                ErrorMsg="";
+                if (AlarmRequestFail!=null)
+                {
+                    Program.AlarmManager.Clear(AlarmRequestFail,$"CLEARED: {Name} now responding.");
+                    AlarmRequestFail = null;
+                }
+                if (!String.IsNullOrEmpty(ErrorMsg)) ErrorMsg="";
              }
              else if (AlarmRequestFail ==null && _requestFailCount == 3)
              {
@@ -144,11 +144,9 @@ namespace TFABot
            }
         }
         
-
         
         public async Task GetHeightAsync()
         {
-        
             try{
                 if (HeightTask!=null && HeightTask.Status == TaskStatus.Running) return;
         
@@ -192,7 +190,6 @@ namespace TFABot
                    
                     if (!string.IsNullOrEmpty(content))
                     {
-                    
                         pos1 = content.IndexOf("leaderheight\":");
                         pos1+=14;
                         pos2 = content.IndexOf(",",pos1);
@@ -206,7 +203,6 @@ namespace TFABot
                         {
                             ErrorMsg="Invalid data";
                         }
-                        
                     }
                     else
                     {
@@ -227,10 +223,8 @@ namespace TFABot
                {
                  ErrorMsg="Empty data";
                }
-                              
                
                Console.WriteLine(ToString());
-            
             }
             catch (Exception ex)
             {
@@ -250,11 +244,9 @@ namespace TFABot
                 {
             
                     Uri myUri = new Uri(Host);
-               
                 
                     clsRollingAverage pingLatency = new clsRollingAverage(10);
                     clsRollingAverage pingPacketLoss = new clsRollingAverage(10);
-        
                     
                     try
                     {
@@ -297,7 +289,6 @@ namespace TFABot
             Group = node.Group;
             Host = node.Host;
             Monitor = node.Monitor;
-        
         }
         
         public void PostPopulate()

@@ -28,15 +28,18 @@ namespace TFABot
         
         static public void call(String name, DSharpPlus.Entities.DiscordChannel ChBotAlert = null)
         {
-            name = name.ToLower();
+            name = name.Replace("call ","").ToLower().Trim();
             
             clsUser user;
             if (!Program.UserList.TryGetValue(name,out user))
             {
-              user = Program.UserList.Values.FirstOrDefault(x=>x.DiscordName==name);
+              user = Program.UserList.Values.FirstOrDefault(x=>x.DiscordName.ToLower()==name || x.Name.ToLower()==name);
             }
             
-            if (user!=null) call(user.DiscordName,user.Tel,ChBotAlert);
+            if (user!=null) 
+                call(user.DiscordName,user.Tel,ChBotAlert);
+            else if (ChBotAlert!=null)
+               ChBotAlert.SendMessageAsync("name not found!");
             
         }
         

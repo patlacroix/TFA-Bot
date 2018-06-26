@@ -88,7 +88,6 @@ namespace TFABot
                 Console.WriteLine("Discord-Token not found");
                 return (int)enumRunState.Error;
             }
-            
                         
             using (Bot = new clsBotClient(DiscordToken))
             {
@@ -122,6 +121,20 @@ namespace TFABot
             
             
             Console.WriteLine($"Exit Code: {RunState} {Enum.GetName(typeof(enumRunState), RunState)}");
+            
+            switch(RunState)
+            {
+                case enumRunState.Update:
+                    Program.Bot.Our_BotAlert.SendMessageAsync("Shutting down to update. Back soon. :grin:");
+                    break;
+                case enumRunState.Restart:
+                    Program.Bot.Our_BotAlert.SendMessageAsync("Shutting down to restart. :relieved:");
+                    break;
+                case enumRunState.Stop:
+                    Program.Bot.Our_BotAlert.SendMessageAsync("Goodbye! :sleeping:");
+                    break;
+            }
+            
             return (int)RunState;
             
             

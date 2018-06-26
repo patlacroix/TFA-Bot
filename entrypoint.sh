@@ -20,7 +20,7 @@ until [ $exitcode -eq 0 ]
 do
         startdate="$(date +%s)"
         cd $APP_DIR
-        mono $APP_NAME
+        mono $APP_NAME --version=$(git describe --long) --versiondate=$(git log -1 --format=%cd)
         exitcode=$?
         enddate="$(date +%s)"
         
@@ -51,6 +51,5 @@ do
                 sleep 10  # delay to protect against eating the CPU resourses with infinate loop
         fi
 
-        
 done
 echo "BASH: terminate $exitcode"

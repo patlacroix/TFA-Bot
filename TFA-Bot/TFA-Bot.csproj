@@ -114,6 +114,7 @@
     <Compile Include="DiscordBot\Commands\clsBotControl.cs" />
     <Compile Include="DiscordBot\Commands\clsHelp.cs" />
     <Compile Include="clsVersionControl.cs" />
+    <Compile Include="DiscordBot\Commands\clsVersion.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

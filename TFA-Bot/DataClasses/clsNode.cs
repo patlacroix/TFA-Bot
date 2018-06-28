@@ -75,7 +75,7 @@ namespace TFABot
              _heightLowCount = value;
              if (_heightLowCount==0 && AlarmHeightLow!=null)
              {
-                Program.AlarmManager.Clear(AlarmHeightLow,$"CLEARED:  {Name} height low cleared.");
+                Program.AlarmManager.Clear(AlarmHeightLow,$"CLEARED: {Name} height low.");
                 AlarmHeightLow = null;
                 ErrorMsg="";
              }

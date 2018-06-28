@@ -26,7 +26,8 @@ docker run --rm -d -e "BOTURL=https://docs.google.com/spreadsheets/d/12345678912
 
 TFA-Bot uses [SIPp](https://github.com/SIPp/sipp) to make phone calls via a SIP VOIP gateway.
 The supplied dialplan.xml may work for you. It calls any given number until it's answered (or times out).
-Some services may require a custom dialplan, which you can test using the sipp bash command.
+Some services may require a custom dialplan or "scenario", which you can test using the sipp bash command.
+[Alternative scenario scrips here](https://github.com/saghul/sipp-scenarios)
 
 Fill in your SIP settings on the spreadsheet.  You can optionally provide the password to docker using -e "SIP-PASSWORD=...."
 

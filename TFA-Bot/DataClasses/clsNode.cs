@@ -31,13 +31,8 @@ namespace TFABot
         [ASheetColumnHeader("monitor")]
         public bool Monitor {get;set;}
         
-        
-        Task HeightTask = null;
-        
-
         public String ErrorMsg { get; private set;}
-        
-        
+                
         public int Latency
         {
           get{ return LatencyList.CurrentAverage; }
@@ -145,27 +140,19 @@ namespace TFABot
         }
         
         
-        public async Task GetHeightAsync()
+        public async Task GetHeightAsync(int timeout = 2000)
         {
-            try{
-                if (HeightTask!=null && HeightTask.Status == TaskStatus.Running) return;
-        
-                HeightTask = Task.Run(() => {GetHeight();});
-            } catch (Exception ex)
-            {
-             //   SetError("GetHeight Task failed");
-            }
-             
-        
+             await Task.Run(() => {GetHeight(timeout);});
         }
         
-        private void GetHeight()
+        
+        public void GetHeight(int timeout = 2000)
         {
             try {
                 
                 var client = new RestClient($"http://{Host}:8088");
                         
-                client.Timeout = 2000;                    
+                client.Timeout = timeout;                    
                         
                 var request = new RestRequest("v2", Method.POST);
                 request.AddHeader("Content-type", "application/json");
@@ -288,7 +275,15 @@ namespace TFABot
         
             Group = node.Group;
             Host = node.Host;
-            Monitor = node.Monitor;
+            
+            if (Monitor != node.Monitor)
+            {
+                Monitor = node.Monitor;
+                HeightLowCount=0;
+                LatencyLowCount=0;
+                RequestFailCount=0;
+            }
+            PostPopulate();
         }
         
         public void PostPopulate()

@@ -50,9 +50,6 @@ namespace TFABot
         {
             foreach (var node in Program.NodesList.Values.Where(x=>x.Group == this.Name && x.Monitor))
             {
-                
-                node.GetHeightAsync(); //get node status. The results we test on the next loop.
-                
                 //Check the height, against heighest known height
                 if (node.LeaderHeight > Network.TopHeight) //New highest LearderHeight.
                 {

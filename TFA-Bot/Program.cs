@@ -93,14 +93,22 @@ namespace TFABot
                 Console.WriteLine("Discord-Token not found");
                 return (int)enumRunState.Error;
             }
-                        
+             
+            const int apiTimeout = 2000;
             using (Bot = new clsBotClient(DiscordToken))
             {
                 Bot.RunAsync();
             
                 while (RunState == enumRunState.Run)
                 {
-                
+                    //Query every node.
+                    foreach (var node in Program.NodesList.Values.Where(x=>x.Monitor))
+                    {
+                           node.GetHeightAsync(apiTimeout); 
+                    }
+
+                    ApplicationHold.WaitOne(apiTimeout);  //Wait for the timeout
+                    
                     foreach (var group in NodeGroupList.Values)
                     {
                         group.Monitor();
@@ -119,7 +127,7 @@ namespace TFABot
                     
                    AlarmManager.Process();
                     
-                   ApplicationHold.WaitOne(5000);
+                   ApplicationHold.WaitOne(3000);
                 }
             }
             

@@ -18,7 +18,7 @@ namespace TFABot.DiscordBot.Commands
         
         public void Run(MessageCreateEventArgs e)
         {
-            clsCaller.call(e);
+            clsDialler.call(e);
         }
         
         public String HelpString

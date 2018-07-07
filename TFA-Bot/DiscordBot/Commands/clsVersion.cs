@@ -20,10 +20,11 @@ namespace TFABot.DiscordBot.Commands
         public void Run(MessageCreateEventArgs e)
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"Running  Version:\t{clsVersionControl.Version??"Not Found"} {clsVersionControl.VersionDateTime??""}");
-            sb.AppendLine($"Latest   Version: {clsVersionControl.GetLatestTag()}");
-            sb.AppendLine($"Previous Installed Version:\t{clsVersionControl.PreviousVersion??"Not Found"}");
-            
+            sb.Append("```");
+            sb.AppendLine($"Running  Version: {clsVersionControl.Version??"Not Found"} {clsVersionControl.VersionDateTime??""}");
+            sb.AppendLine($"Latest   Version: {clsVersionControl.GetLatestTag()?? "Not Found" }");
+            sb.AppendLine($"Previous Installed Version: {clsVersionControl.PreviousVersion??"Not Found"}");
+            sb.Append("```");
             e.Channel.SendMessageAsync(sb.ToString());
             
             clsVersionControl.GetLatestTag();

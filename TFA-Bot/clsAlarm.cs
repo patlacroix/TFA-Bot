@@ -86,7 +86,7 @@ namespace TFABot
                     if (!TimeCall.HasValue && notificationPolicy.Call>=0 && DateTime.UtcNow > Opened.AddSeconds(notificationPolicy.Call))
                     {
                         TimeCall = DateTime.UtcNow;
-                        clsCaller.CallAlertList();
+                        clsDialler.CallAlertList();
                     }
                 }
     

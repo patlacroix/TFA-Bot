@@ -158,7 +158,7 @@ namespace TFABot
         
         static public void CallAlert()
         {
-            if (AlarmState == EnumAlarmState.On) clsCaller.CallAlertList();
+            if (AlarmState == EnumAlarmState.On) clsDialler.CallAlertList();
         }
 
         static public void SetRunState(enumRunState runState)

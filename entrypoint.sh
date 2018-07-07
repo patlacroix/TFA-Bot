@@ -40,7 +40,7 @@ do
         then
           echo "SOFTWARE UPDATE"
           cp -fv $APP_NAME $APP_NAME_previous
-          build
+          msbuild -p:Configuration=Release TFA-Bot.sln
         elif [ $exitcode -eq 0 ] #Shutdown
         then
           echo "SHUTDOWN"

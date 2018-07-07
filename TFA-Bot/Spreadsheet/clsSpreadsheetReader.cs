@@ -96,7 +96,7 @@ namespace TFABot
             request.AddParameter("headers","true");
             //request.AddParameter("tq","select A,B,C,D,E,F,G,H");
 
-            
+            Console.WriteLine("Reading {SheetName}");
             IRestResponse response = client.Execute(request);
             
             if (response.IsSuccessful)       
@@ -104,7 +104,7 @@ namespace TFABot
                 String[][] stdata = new string[0][];
                 
                 var lines = response.Content.Split(new [] {'\n'});
-                if (lines[0].Contains("invalid_query")) new Exception("Invalid query");
+                if (lines[0].Contains("invalid_query")) throw new Exception("Invalid query");
                 
                 for (int f=0;f<lines.Length;f++)
                 {
@@ -120,8 +120,8 @@ namespace TFABot
             }
             else
             {
-                new Exception("Get spreadsheet data failed");
-                return null;
+            
+                throw new Exception($"Get spreadsheet data failed {response.ErrorMessage}");
             }
             
         }

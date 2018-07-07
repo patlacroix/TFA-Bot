@@ -29,7 +29,7 @@ namespace TFABot
                 }
                 else
                 {
-                  new Exception("Network Name not found.");
+                  throw new Exception("Network Name not found.");
                 }
             }
         }

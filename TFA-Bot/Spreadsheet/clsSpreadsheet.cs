@@ -19,12 +19,19 @@ namespace TFABot
         {
             var sb = new StringBuilder();
             
-            ReadSheetSettings("Settings",sb);
-            ReadSheet<clsNetwork>("Networks",Program.NetworkList,sb);
-            ReadSheet<clsUser>("Users",Program.UserList,sb);
-            ReadSheet<clsNodeGroup>("NodeGroups",Program.NodeGroupList,sb);
-            ReadSheet<clsNotificationPolicy>("NotificationPolicy",Program.NotificationPolicyList,sb);
-            ReadSheet<clsNode>("Nodes",Program.NodesList,sb);
+            try
+            {
+                ReadSheetSettings("Settings",sb);
+                ReadSheet<clsNetwork>("Networks",Program.NetworkList,sb);
+                ReadSheet<clsUser>("Users",Program.UserList,sb);
+                ReadSheet<clsNodeGroup>("NodeGroups",Program.NodeGroupList,sb);
+                ReadSheet<clsNotificationPolicy>("NotificationPolicy",Program.NotificationPolicyList,sb);
+                ReadSheet<clsNode>("Nodes",Program.NodesList,sb);
+            }
+            catch (Exception ex)
+            {
+                sb.AppendLine($"Error loading Settings {ex.Message}");
+            }
             return sb.ToString();
         }
         

@@ -85,8 +85,7 @@ namespace TFABot
                 Console.WriteLine($"URL={BotURL}");
                 
                 Spreadsheet = new clsSpreadsheet(BotURL);
-                Spreadsheet.LoadSettings();
-                Console.WriteLine("Loaded Settings");
+                Console.WriteLine(Spreadsheet.LoadSettings());
             
                 String value;            
                 if (SettingsList.TryGetValue("AlarmOffWarningMinutes", out value)) uint.TryParse(value,out AlarmOffWarningMinutes);

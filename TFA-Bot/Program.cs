@@ -72,82 +72,91 @@ namespace TFABot
         {
             AlarmState = EnumAlarmState.On;
             
-            BotURL = Environment.GetEnvironmentVariable("BOTURL");
-            
-            if (String.IsNullOrEmpty(BotURL))
+            try
             {
-                Console.WriteLine("'BOTURL' Google Spreadsheet URL missing.");
-                return (int)enumRunState.Error;
-            }
-            Console.WriteLine($"URL={BotURL}");
-            
-            Spreadsheet = new clsSpreadsheet(BotURL);
-            Spreadsheet.LoadSettings();
-        
-            String value;            
-            if (SettingsList.TryGetValue("AlarmOffWarningMinutes", out value)) uint.TryParse(value,out AlarmOffWarningMinutes);
-
-            String DiscordToken;            
-            if (!SettingsList.TryGetValue("Discord-Token", out DiscordToken))
-            {
-                Console.WriteLine("Discord-Token not found");
-                return (int)enumRunState.Error;
-            }
-             
-            const int apiTimeout = 2000;
-            using (Bot = new clsBotClient(DiscordToken))
-            {
-                Bot.RunAsync();
-            
-                while (RunState == enumRunState.Run)
+                BotURL = Environment.GetEnvironmentVariable("BOTURL");
+                
+                if (String.IsNullOrEmpty(BotURL))
                 {
-                    //Query every node.
-                    foreach (var node in Program.NodesList.Values.Where(x=>x.Monitor))
-                    {
-                           node.GetHeightAsync(apiTimeout); 
-                    }
-
-                    ApplicationHold.WaitOne(apiTimeout);  //Wait for the timeout
-                    
-                    foreach (var group in NodeGroupList.Values)
-                    {
-                        group.Monitor();
-                    }
-                    
-                    foreach(var network in NetworkList.Values)
-                    {
-                        network.CheckStall();
-                    }
-                    
-                    if (AlarmState == EnumAlarmState.Off && (DateTime.UtcNow - AlarmOffTime).TotalMinutes > (AlarmOffWarningMinutes*(AlarmOffWarningMultiplier+1))) 
-                    {
-                        Bot.Our_BotAlert.SendMessageAsync($"Warning, the Alarm has been off {(DateTime.UtcNow - AlarmOffTime).TotalMinutes:0} minutes.  Forget to reset it?");
-                        AlarmOffWarningMultiplier++;
-                    }
-                    
-                   AlarmManager.Process();
-                    
-                   ApplicationHold.WaitOne(3000);
+                    Console.WriteLine("'BOTURL' Google Spreadsheet URL missing.");
+                    return (int)enumRunState.Error;
                 }
-            }
+                Console.WriteLine($"URL={BotURL}");
+                
+                Spreadsheet = new clsSpreadsheet(BotURL);
+                Spreadsheet.LoadSettings();
+                Console.WriteLine("Loaded Settings");
             
-            
-            Console.WriteLine($"Exit Code: {RunState} {Enum.GetName(typeof(enumRunState), RunState)}");
-            
-            switch(RunState)
+                String value;            
+                if (SettingsList.TryGetValue("AlarmOffWarningMinutes", out value)) uint.TryParse(value,out AlarmOffWarningMinutes);
+    
+                String DiscordToken;            
+                if (!SettingsList.TryGetValue("Discord-Token", out DiscordToken))
+                {
+                    Console.WriteLine("Discord-Token not found");
+                    return (int)enumRunState.Error;
+                }
+                 
+                Console.WriteLine("Starting monitoring");
+                const int apiTimeout = 2000;
+                using (Bot = new clsBotClient(DiscordToken))
+                {
+                    Bot.RunAsync();
+                
+                    while (RunState == enumRunState.Run)
+                    {
+                        //Query every node.
+                        foreach (var node in Program.NodesList.Values.Where(x=>x.Monitor))
+                        {
+                               node.GetHeightAsync(apiTimeout); 
+                        }
+    
+                        ApplicationHold.WaitOne(apiTimeout);  //Wait for the timeout
+                        
+                        foreach (var group in NodeGroupList.Values)
+                        {
+                            group.Monitor();
+                        }
+                        
+                        foreach(var network in NetworkList.Values)
+                        {
+                            network.CheckStall();
+                        }
+                        
+                        if (AlarmState == EnumAlarmState.Off && (DateTime.UtcNow - AlarmOffTime).TotalMinutes > (AlarmOffWarningMinutes*(AlarmOffWarningMultiplier+1))) 
+                        {
+                            Bot.Our_BotAlert.SendMessageAsync($"Warning, the Alarm has been off {(DateTime.UtcNow - AlarmOffTime).TotalMinutes:0} minutes.  Forget to reset it?");
+                            AlarmOffWarningMultiplier++;
+                        }
+                        
+                       AlarmManager.Process();
+                        
+                       ApplicationHold.WaitOne(3000);
+                    }
+                }
+                
+                
+                Console.WriteLine($"Exit Code: {RunState} {Enum.GetName(typeof(enumRunState), RunState)}");
+                
+                switch(RunState)
+                {
+                    case enumRunState.Update:
+                        Program.Bot.Our_BotAlert.SendMessageAsync("Shutting down to update. Back soon. :grin:");
+                        break;
+                    case enumRunState.Restart:
+                        Program.Bot.Our_BotAlert.SendMessageAsync("Shutting down to restart. :relieved:");
+                        break;
+                    case enumRunState.Stop:
+                        Program.Bot.Our_BotAlert.SendMessageAsync("Goodbye! :sleeping:");
+                        break;
+                }
+                
+                return (int)enumRunState.Error;
+            } catch (Exception ex)
             {
-                case enumRunState.Update:
-                    Program.Bot.Our_BotAlert.SendMessageAsync("Shutting down to update. Back soon. :grin:");
-                    break;
-                case enumRunState.Restart:
-                    Program.Bot.Our_BotAlert.SendMessageAsync("Shutting down to restart. :relieved:");
-                    break;
-                case enumRunState.Stop:
-                    Program.Bot.Our_BotAlert.SendMessageAsync("Goodbye! :sleeping:");
-                    break;
+                Console.WriteLine($"ERROR: {ex.Message}");
+                return (int)RunState;
             }
-            
-            return (int)RunState;
         }
         
         static public void SendAlert(String message)

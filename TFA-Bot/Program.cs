@@ -74,6 +74,7 @@ namespace TFABot
             
             try
             {
+                Console.WriteLine($"ARGS={Environment.CommandLine}");
                 BotURL = Environment.GetEnvironmentVariable("BOTURL");
                 
                 if (String.IsNullOrEmpty(BotURL))

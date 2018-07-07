@@ -17,7 +17,6 @@ namespace TFABot
         
         public String LoadSettings()
         {
-        
             var sb = new StringBuilder();
             
             ReadSheetSettings("Settings",sb);
@@ -27,7 +26,6 @@ namespace TFABot
             ReadSheet<clsNotificationPolicy>("NotificationPolicy",Program.NotificationPolicyList,sb);
             ReadSheet<clsNode>("Nodes",Program.NodesList,sb);
             return sb.ToString();
-
         }
         
         public void ReadSheetSettings(String SheetName, StringBuilder sb)

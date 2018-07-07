@@ -27,7 +27,8 @@ namespace TFABot
     
                 match = GetVersionDateRegex.Match(Environment.CommandLine);
                 if (match.Success) VersionDateTime = match.Value;
-                            
+                
+                Console.WriteLine($"Version {Version} {VersionDateTime}");
                 
                 if (File.Exists(versionFilePath))
                 {
@@ -37,6 +38,7 @@ namespace TFABot
                 if (!String.IsNullOrEmpty(Version) && PreviousVersion != Version)
                 {
                     UpdatedFlag=true;
+                    if (!String.IsNullOrEmpty(PreviousVersion)) Console.WriteLine($"New version {PreviousVersion} => {Version}");
                     File.WriteAllText(versionFilePath,Version);
                 }
             }

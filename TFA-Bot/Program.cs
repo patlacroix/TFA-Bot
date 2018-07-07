@@ -85,7 +85,9 @@ namespace TFABot
                 Console.WriteLine($"URL={BotURL}");
                 
                 Spreadsheet = new clsSpreadsheet(BotURL);
-                Console.WriteLine(Spreadsheet.LoadSettings());
+                var log = Spreadsheet.LoadSettings();
+                Console.WriteLine(log);
+                
             
                 String value;            
                 if (SettingsList.TryGetValue("AlarmOffWarningMinutes", out value)) uint.TryParse(value,out AlarmOffWarningMinutes);
@@ -102,7 +104,8 @@ namespace TFABot
                 using (Bot = new clsBotClient(DiscordToken))
                 {
                     Bot.RunAsync();
-                
+                    if (log.Contains("rror:")) Bot.SendAlert($"```{log}```");
+                    
                     while (RunState == enumRunState.Run)
                     {
                         //Query every node.
@@ -141,13 +144,13 @@ namespace TFABot
                 switch(RunState)
                 {
                     case enumRunState.Update:
-                        Program.Bot.Our_BotAlert.SendMessageAsync("Shutting down to update. Back soon. :grin:");
+                        Program.Bot.Our_BotAlert.SendMessageAsync("Shutting down to update. Back soon. :grin:").Wait(1000);;
                         break;
                     case enumRunState.Restart:
-                        Program.Bot.Our_BotAlert.SendMessageAsync("Shutting down to restart. :relieved:");
+                        Program.Bot.Our_BotAlert.SendMessageAsync("Shutting down to restart. :relieved:").Wait(1000);;
                         break;
                     case enumRunState.Stop:
-                        Program.Bot.Our_BotAlert.SendMessageAsync("Goodbye! :sleeping:");
+                        Program.Bot.Our_BotAlert.SendMessageAsync("Goodbye! :sleeping:").Wait(1000);
                         break;
                 }
                 

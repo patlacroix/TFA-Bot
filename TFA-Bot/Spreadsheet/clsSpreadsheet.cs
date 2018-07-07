@@ -22,10 +22,11 @@ namespace TFABot
             try
             {
                 ReadSheetSettings("Settings",sb);
+                ReadSheet<clsNotificationPolicy>("NotificationPolicy",Program.NotificationPolicyList,sb);
                 ReadSheet<clsNetwork>("Networks",Program.NetworkList,sb);
                 ReadSheet<clsUser>("Users",Program.UserList,sb);
                 ReadSheet<clsNodeGroup>("NodeGroups",Program.NodeGroupList,sb);
-                ReadSheet<clsNotificationPolicy>("NotificationPolicy",Program.NotificationPolicyList,sb);
+                
                 ReadSheet<clsNode>("Nodes",Program.NodesList,sb);
             }
             catch (Exception ex)
@@ -41,7 +42,7 @@ namespace TFABot
             try
             {
                 sb.Append($"Loading {SheetName}.....  ");
-                var userSS = sheet.ReadSheet<clsSetting>(SheetName);
+                var userSS = sheet.ReadSheet<clsSetting>(SheetName,sb);
     
                 foreach (var setting in userSS)
                 {
@@ -71,7 +72,7 @@ namespace TFABot
             try
             {
                 sb.Append($"Loading {SheetName}.....  ");
-                var userSS = sheet.ReadSheet<T>(SheetName);
+                var userSS = sheet.ReadSheet<T>(SheetName,sb);
                 Merge(MainList,userSS);
                 sb.AppendLine($"{MainList.Count} items, OK");
             }

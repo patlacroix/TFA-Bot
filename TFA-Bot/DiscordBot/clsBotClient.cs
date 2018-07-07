@@ -28,6 +28,7 @@ namespace DiscordBot
         public DSharpPlus.Entities.DiscordChannel Our_BotAlert = null;
         public DSharpPlus.Entities.DiscordChannel Factom_BotAlert = null;
         
+        StringBuilder TextBuffer = new StringBuilder();
         
         public static clsBotClient Instance = null;
         
@@ -118,6 +119,7 @@ namespace DiscordBot
                        Our_BotAlert = alertChannel;
                        Console.WriteLine($"Our Alert channel: {Our_BotAlert.Name}");
                        if (clsVersionControl.UpdatedFlag) Bot.Our_BotAlert.SendMessageAsync($":drum: Welcome to version {clsVersionControl.Version} :trumpet:");
+                       if (TextBuffer.Length>0) Our_BotAlert.SendMessageAsync(TextBuffer.ToString()).ContinueWith((x)=>{TextBuffer.Clear();});
                     }
                 }
                 else
@@ -131,6 +133,14 @@ namespace DiscordBot
             // a completed task, so that no additional work
             // is done
             return Task.CompletedTask;
+        }
+
+        public void SendAlert(String text)
+        {
+            if (Our_BotAlert != null)
+                Our_BotAlert.SendFileAsync(text);
+            else
+                TextBuffer.AppendLine(text);
         }
 
         private Task Client_ClientError(ClientErrorEventArgs e)

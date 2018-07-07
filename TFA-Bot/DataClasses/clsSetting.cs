@@ -23,9 +23,9 @@ namespace TFABot
             Value = setting.Value;
         }
         
-        public void PostPopulate()
+        public string PostPopulate()
         {
-        
+            return null;
         }
     }
 }

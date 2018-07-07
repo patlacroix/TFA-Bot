@@ -286,14 +286,10 @@ namespace TFABot
             PostPopulate();
         }
         
-        public void PostPopulate()
+        public string PostPopulate()
         {
-            if (!Program.NodeGroupList.TryGetValue(Group,out NodeGroup))
-            {
-                Console.WriteLine("Node Group Not Found!");
-            }
             ErrorMsg = Monitor ? "" : "MONITOR OFF";
-            
+            return (!Program.NodeGroupList.TryGetValue(Group,out NodeGroup)) ? "Error: Node Group Not Found!" : null;
         }
         
         

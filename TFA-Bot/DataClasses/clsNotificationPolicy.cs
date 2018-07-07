@@ -26,9 +26,10 @@ namespace TFABot
             Discord = node.Discord;
             Call = node.Call;
         }
-                public void PostPopulate()
+
+        public string PostPopulate()
         {
-        
+            return null;
         }
     }
 }

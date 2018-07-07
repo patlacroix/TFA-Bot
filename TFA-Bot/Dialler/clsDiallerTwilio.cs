@@ -56,7 +56,7 @@ namespace TFABot.Dialler
                        }
                        else if (response.Content.Contains("AnsweredBy"))
                        {
-                            ChBotAlert.SendMessageAsync($"{Name} Answered");
+                            ChBotAlert.SendMessageAsync($"{Name} call in progress");
                        }
                     }
                 });

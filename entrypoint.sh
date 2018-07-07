@@ -20,7 +20,7 @@ until [ $exitcode -eq 0 ]
 do
         startdate="$(date +%s)"
         cd $APP_DIR
-        mono $APP_NAME --version=$(git describe --long) --versiondate=$(git log -1 --format=%cd)
+        mono $APP_NAME --version=$(git describe --long) --versiondate=$(git log -1 --format=%cd --date=iso8601)
         exitcode=$?
         enddate="$(date +%s)"
         
@@ -40,7 +40,7 @@ do
         then
           echo "SOFTWARE UPDATE"
           cp -fv $APP_NAME $APP_NAME_previous
-          msbuild -p:Configuration=Release TFA-Bot.sln
+          build
         elif [ $exitcode -eq 0 ] #Shutdown
         then
           echo "SHUTDOWN"

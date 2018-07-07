@@ -61,7 +61,7 @@ namespace TFABot
             }
         }
         
-        static string ExecuteBashCommand(string command)
+        static string ExecuteBashCommand(string command, int timeout = 5000)
         {
             // according to: https://stackoverflow.com/a/15262019/637142
             // thans to this we will pass everything as one command
@@ -80,9 +80,10 @@ namespace TFABot
             };
     
             proc.Start();
-            proc.WaitForExit();
-    
-            return proc.StandardOutput.ReadToEnd();
+            proc.WaitForExit(timeout);
+            if (proc.HasExited) return proc.StandardOutput.ReadToEnd();
+            return "Command Timeout";
+            
         }
         
 

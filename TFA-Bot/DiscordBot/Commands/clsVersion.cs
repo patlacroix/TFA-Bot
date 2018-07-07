@@ -28,7 +28,6 @@ namespace TFABot.DiscordBot.Commands
             e.Channel.SendMessageAsync(sb.ToString());
             
             clsVersionControl.GetLatestTag();
-            
         }
         
         public String HelpString

@@ -35,9 +35,9 @@ namespace TFABot
             StallNotification = network.StallNotification;
         }
         
-        public void PostPopulate()
+        public string PostPopulate()
         {
-        
+           return (!Program.NotificationPolicyList.ContainsKey(StallNotification))? $"Error: {StallNotification} not found" : null;
         }
         
         public void SetTopHeight(uint height)

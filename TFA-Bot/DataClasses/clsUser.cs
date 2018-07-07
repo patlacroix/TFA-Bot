@@ -40,16 +40,16 @@ namespace TFABot
             TimeTo = user.TimeTo;
         }
         
-        public void PostPopulate()
+        public String PostPopulate()
         {
             try
             {
                 GetUserTime();  //Test to see if we can get the time.
+                return null;
             }
             catch (Exception ex)
             {
-            
-                Console.WriteLine($"{Name} has invalid Timezone {ex.Message}");
+                return $"Error: {Name} has invalid Timezone {ex.Message}";
             }
          
         }

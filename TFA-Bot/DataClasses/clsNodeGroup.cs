@@ -43,9 +43,6 @@ namespace TFABot
         [ASheetColumnHeader("latency")]
         public String Latency {get;set;}
 
-        [ASheetColumnHeader("stall")]
-        public String Stall {get;set;}
-
         public void Monitor()
         {
             foreach (var node in Program.NodesList.Values.Where(x=>x.Group == this.Name && x.Monitor))
@@ -106,13 +103,14 @@ namespace TFABot
             Ping = group.Ping;
             Height = group.Height;
             Latency = group.Latency;
-            Stall = group.Stall;
             Network = group.Network;
         }
 
-        public void PostPopulate()
+        public string PostPopulate()
         {
-        
+           return (!Program.NotificationPolicyList.ContainsKey(Ping)) || 
+           !Program.NotificationPolicyList.ContainsKey(Latency) ||
+           !Program.NotificationPolicyList.ContainsKey(Height) ? $"Error: NodeGroup {Name} has incorrect notification." : null;
         }
     }
 }

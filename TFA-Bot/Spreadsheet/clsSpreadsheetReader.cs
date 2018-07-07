@@ -4,6 +4,7 @@ using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace TFABot
 {
@@ -22,7 +23,7 @@ namespace TFABot
         
         
         //Generic sheet reader.
-        public List<T> ReadSheet<T>(String SheetName) where T : class
+        public List<T> ReadSheet<T>(String SheetName,StringBuilder sb) where T : class
         {
             //Create a new list
             List<T> list = new List<T>();
@@ -77,7 +78,7 @@ namespace TFABot
                     }
                 }
                 
-                ((ISpreadsheet<T>)dataClass).PostPopulate();
+                sb.Append(((ISpreadsheet<T>)dataClass).PostPopulate()??"");
             }
            
            return list;
@@ -96,7 +97,9 @@ namespace TFABot
             request.AddParameter("headers","true");
             //request.AddParameter("tq","select A,B,C,D,E,F,G,H");
 
-            Console.WriteLine("Reading {SheetName}");
+            client.Timeout = 120000;
+
+            Console.WriteLine($"Reading {SheetName}");
             IRestResponse response = client.Execute(request);
             
             if (response.IsSuccessful)       

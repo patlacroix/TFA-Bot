@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Text;
 using System.Linq;
+using TFABot.Git;
 
 namespace TFABot
 {
@@ -74,6 +75,21 @@ namespace TFABot
             
             try
             {
+                try
+                {
+                    using (var git = new clsGit())
+                    {
+                        if (git.CheckFileVersion())
+                        {
+                            Console.WriteLine("NEW VERSION DETECTED");
+                            Console.WriteLine(git.Head.ToString());
+                        }
+                    }
+                } catch (Exception ex)
+                {
+                    Console.WriteLine($"GIT QUERY FAILED {ex.Message}");
+                }
+            
                 Console.WriteLine($"ARGS={Environment.CommandLine}");
                 BotURL = Environment.GetEnvironmentVariable("BOTURL");
                 

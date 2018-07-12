@@ -14,6 +14,7 @@ using System.Diagnostics;
 using TFABot;
 using static TFABot.Program;
 using TFABot.DiscordBot;
+using TFABot.Git;
 
 namespace DiscordBot
 {
@@ -118,7 +119,7 @@ namespace DiscordBot
                     {
                        Our_BotAlert = alertChannel;
                        Console.WriteLine($"Our Alert channel: {Our_BotAlert.Name}");
-                       if (clsVersionControl.UpdatedFlag) Bot.Our_BotAlert.SendMessageAsync($":drum: Welcome to version {clsVersionControl.Version} :trumpet:");
+                       if (clsGit.VersionChangeFlag) Bot.Our_BotAlert.SendMessageAsync($":drum: Welcome to version {clsGitHead.GetHeadToString()} :trumpet:");
                        if (TextBuffer.Length>0) Our_BotAlert.SendMessageAsync(TextBuffer.ToString()).ContinueWith((x)=>{TextBuffer.Clear();});
                     }
                 }

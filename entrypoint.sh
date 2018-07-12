@@ -20,7 +20,7 @@ until [ $exitcode -eq 0 ]
 do
         startdate="$(date +%s)"
         cd $APP_DIR
-        mono $APP_NAME --version=$(git describe --long) --versiondate=$(git log -1 --format=%cd --date=iso8601)
+        mono $APP_NAME
         exitcode=$?
         enddate="$(date +%s)"
         

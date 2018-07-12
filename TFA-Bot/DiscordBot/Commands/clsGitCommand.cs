@@ -6,23 +6,34 @@ using TFABot.Git;
 
 namespace TFABot.DiscordBot.Commands
 {
-    public class clsVersion : IBotCommand
+    public class clsGitCommand : IBotCommand
     {
     
         public String[] MatchCommand {get; private set;}
         public String[] MatchSubstring {get; private set;}
         public Regex[] MatchRegex {get; private set;}
         
-        public clsVersion()
+        public clsGitCommand()
         {
-            MatchCommand = new []{"version"};
+            MatchCommand = new []{"git"};
         }
         
         public void Run(MessageCreateEventArgs e)
         {
             var sb = new StringBuilder();
             sb.Append("```");
-            sb.AppendLine(clsGitHead.GetHeadToString());
+            try
+            {
+                using (var git = new clsGit())
+                {
+                    sb.AppendLine(git.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                sb.AppendLine($"Git unavailabe {ex.Message}");
+            }
+            
             sb.Append("```");
             e.Channel.SendMessageAsync(sb.ToString());
         }
@@ -31,7 +42,7 @@ namespace TFABot.DiscordBot.Commands
         {
             get
             {
-                return "version";
+                return "git\ngit\t<branch/commit>\tCheckout git";
             }
         }
     }

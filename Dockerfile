@@ -1,5 +1,7 @@
 FROM ubuntu:18.04
 
+ARG BRANCH="#master"
+
 # Set the timezone.
 ENV TZ=UTC
 RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime
@@ -25,7 +27,7 @@ WORKDIR /app/sipp
 RUN ./build.sh
 
 WORKDIR /app
-RUN git clone https://git.factoid.org/TFA/TFA-Bot.git
+RUN git clone https://git.factoid.org/TFA/TFA-Bot.git${BRANCH}
 RUN wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 WORKDIR /app/TFA-Bot
 RUN mono ../nuget.exe restore TFA-Bot.sln

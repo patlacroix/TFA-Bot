@@ -37,6 +37,7 @@ namespace TFABot.Git
             FetchOptions options = new FetchOptions() { Prune=true };
             foreach (Remote remote in Repo.Network.Remotes)
             {
+                Console.WriteLine($"GIT fetch{remote.Url}");
                 Repo.Network.Fetch(remote.Name,remote.FetchRefSpecs.Select(x=>x.Specification).ToArray(),options);
             }
         }
@@ -116,14 +117,18 @@ namespace TFABot.Git
         {
             try
             {
+                Console.Write("Get file version...");
                 if (File.Exists(versionFilePath))
                 {
-                    return File.ReadAllText(versionFilePath);
+                    var ver = File.ReadAllText(versionFilePath);
+                    Console.WriteLine(ver);
+                    return ver;
                 }
+                Console.WriteLine("not found");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"SetFileVersion Error {ex.Message}");
+                Console.WriteLine($"GetFileVersion Error {ex.Message}");
             }
             return null;
         }
@@ -157,6 +162,7 @@ namespace TFABot.Git
         
         public new string ToString()
         {
+            GetBranches();
              var cd = new clsColumnDisplay();
              
              cd.AppendLine("Branches");

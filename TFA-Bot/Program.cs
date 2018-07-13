@@ -82,7 +82,7 @@ namespace TFABot
                         if (git.CheckFileVersion())
                         {
                             Console.WriteLine("NEW VERSION DETECTED");
-                            Console.WriteLine(git.Head.ToString());
+                            Console.WriteLine(git.Head?.ToString()??"HEAD is NULL?");
                         }
                     }
                 } catch (Exception ex)

@@ -12,7 +12,7 @@ namespace TFABot.Git
         {
             if (git == null)
             {
-                git = new clsGit();
+                Git = new clsGit();
                 DisposeofGit = true;
             }
         }

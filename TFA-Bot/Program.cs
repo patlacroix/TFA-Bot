@@ -82,8 +82,8 @@ namespace TFABot
                         if (git.CheckFileVersion())
                         {
                             Console.WriteLine("NEW VERSION DETECTED");
-                            Console.WriteLine(git ?? "GIT NULL");
-                            Console.WriteLine(git.Head ?? "GIT.HEAD NULL");
+                            Console.WriteLine(git == null);
+                            Console.WriteLine(git.Head == null);
                             Console.WriteLine(git.Head.ToString() ?? "GITHEAD.ToString() NULL");
                             Console.WriteLine(git.Head?.ToString()??"HEAD is NULL?");
                         }

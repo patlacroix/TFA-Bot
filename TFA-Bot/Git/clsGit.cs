@@ -26,7 +26,7 @@ namespace TFABot.Git
                 dir = dir.Parent;
                 if (dir==null) throw new Exception("No .git dir found");
             }
-            Console.WriteLine($"Opening Git @: {dir.FullName}");
+            Console.WriteLine($"Opening Git @ {dir.FullName}");
             Repo = new Repository(dir.FullName);
             Fetch();
             Head = new clsGitHead(this);
@@ -37,7 +37,7 @@ namespace TFABot.Git
             FetchOptions options = new FetchOptions() { Prune=true };
             foreach (Remote remote in Repo.Network.Remotes)
             {
-                Console.WriteLine($"GIT fetch{remote.Url}");
+                Console.WriteLine($"GIT fetch {remote.Url}");
                 Repo.Network.Fetch(remote.Name,remote.FetchRefSpecs.Select(x=>x.Specification).ToArray(),options);
             }
         }

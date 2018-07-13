@@ -24,9 +24,9 @@ namespace TFABot.Git
             while (dir.GetDirectories(".git",SearchOption.TopDirectoryOnly).Length==0)
             {
                 dir = dir.Parent;
-                if (dir==null) throw new Exception("No Git");
+                if (dir==null) throw new Exception("No .git dir found");
             }
-            
+            Console.WriteLine($"Opening Git @: {dir.FullName}");
             Repo = new Repository(dir.FullName);
             Fetch();
             Head = new clsGitHead(this);

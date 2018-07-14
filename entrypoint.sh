@@ -41,6 +41,10 @@ do
           echo "SOFTWARE UPDATE"
           cp -fv $APP_NAME $APP_NAME_previous
           build
+        elif [ $exitcode -eq 5 ] #MONO ARGS
+        then
+          echo "RUN WITH MONO ARGS $MONOARGS"
+          mono $MONOARGS $APP_NAME
         elif [ $exitcode -eq 0 ] #Shutdown
         then
           echo "SHUTDOWN"

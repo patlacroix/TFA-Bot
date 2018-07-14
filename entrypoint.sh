@@ -11,7 +11,7 @@ function build
     cd $BUILD_DIR
     git pull
     mono ../nuget.exe restore TFA-Bot.sln    
-    msbuild -property:Configuration=Release -property:GitCommit $(git rev-parse HEAD) TFA-Bot.sln
+    msbuild -property:Configuration=Release -property:GitCommit=$(git rev-parse HEAD) TFA-Bot.sln
 }
 
 

@@ -43,7 +43,7 @@ do
           build
         elif [ $exitcode -eq 5 ] #MONO ARGS
         then
-          if [ ! -f $APP_DIR/mono_args.txt ]; then
+          if [ -f $APP_DIR/mono_args.txt ]; then
              MONOARGS=$(<$APP_DIR/monoargs.txt)
              echo "RUN WITH MONO ARGS $MONOARGS"
              mono $MONOARGS $APP_NAME

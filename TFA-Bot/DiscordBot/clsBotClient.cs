@@ -119,7 +119,7 @@ namespace DiscordBot
                     {
                        Our_BotAlert = alertChannel;
                        Console.WriteLine($"Our Alert channel: {Our_BotAlert.Name}");
-                       if (clsGit.VersionChangeFlag) Bot.Our_BotAlert.SendMessageAsync($":drum: Welcome to version {clsGitHead.GetHeadToString()} :trumpet:");
+                       if (clsVersion.VersionChangeFlag) Bot.Our_BotAlert.SendMessageAsync($":drum: Welcome to version {clsGitHead.GetHeadToString()} :trumpet:");
                        if (TextBuffer.Length>0) Our_BotAlert.SendMessageAsync(TextBuffer.ToString()).ContinueWith((x)=>{TextBuffer.Clear();});
                     }
                 }

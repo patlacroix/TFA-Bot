@@ -41,10 +41,7 @@ namespace TFABot.DiscordBot.Commands
             }
             
             sb.Append("```");
-            
-            
-            var GitCommit = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyGitCommit),false).Cast<AssemblyGitCommit>();
-            if (GitCommit!=null && GitCommit.Any<AssemblyGitCommit>()) Console.WriteLine($"Assembly {GitCommit.First().Hash}");
+
             
             if (msgSplit.Length>1) sb.AppendLine("\"bot update\" required to pull branch.");
             

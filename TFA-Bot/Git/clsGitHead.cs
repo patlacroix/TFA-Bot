@@ -74,6 +74,12 @@ namespace TFABot.Git
                     sb.AppendLine(commitcount < 0 ? $"{-commitcount} commit(s) behind": $"{commitcount} commit(s) ahead of");
                     sb.Append ($" {BranchName} {RemoteShaShort} {RemoteCommiter} {RemoteDate:yyyy-MM-dd HH:mm} {RemoteTag}");
                 }
+                
+                if (Git.Repo.Head.Tip.Sha!= clsVersion.GitCommitHash)
+                {
+                    sb.AppendLine($"NOTE: Compiled version does not not match HEAD {clsVersion.GitCommitHash.Substring(0,7)}");
+                }
+                
             }
             else
             {

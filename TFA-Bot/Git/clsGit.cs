@@ -9,8 +9,6 @@ namespace TFABot.Git
 {
     public class clsGit : IDisposable
     {
-        const string versionFilePath = "version.txt";
-        static public bool VersionChangeFlag {get; private set;}
         
         public clsGitHead Head {get; private set;}
         public Repository Repo {get; private set;}
@@ -31,7 +29,8 @@ namespace TFABot.Git
             Fetch();
             Head = new clsGitHead(this);
         }
-               
+     
+       
         public void Fetch()
         {
             FetchOptions options = new FetchOptions() { Prune=true };
@@ -116,52 +115,7 @@ namespace TFABot.Git
             }
         }
         
-        string GetFileVersion()
-        {
-            try
-            {
-                Console.Write("Get file version...");
-                if (File.Exists(versionFilePath))
-                {
-                    var ver = File.ReadAllText(versionFilePath);
-                    Console.WriteLine(ver);
-                    return ver;
-                }
-                Console.WriteLine("not found");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"GetFileVersion Error {ex.Message}");
-            }
-            return null;
-        }
         
-        public bool CheckFileVersion()
-        {
-            var headVer = Repo?.Head?.Tip?.Sha ?? null;
-            if (headVer==null) throw new Exception("Error reading HEAD");
-            
-            var fileVer = GetFileVersion();
-            if (fileVer == null || fileVer != headVer)
-            {
-                VersionChangeFlag=true;
-                SetFileVersion(headVer);
-                return true;
-            }
-            return false;
-        }
-        
-        void SetFileVersion(string version)
-        {
-           try
-           { 
-                File.WriteAllText(versionFilePath,version);
-           }
-           catch (Exception ex)
-           {
-                Console.WriteLine($"SetFileVersion Error {ex.Message}");
-           }
-        }
         
         public new string ToString()
         {

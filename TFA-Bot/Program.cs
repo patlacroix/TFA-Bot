@@ -8,6 +8,8 @@ using System.Threading;
 using System.Text;
 using System.Linq;
 using TFABot.Git;
+using LibGit2Sharp;
+using System.Reflection;
 
 namespace TFABot
 {
@@ -21,6 +23,7 @@ namespace TFABot
             Restart=2,
             Update=3,
             PreviousVersion=4,
+            MonoArgs=5,
             Error = 100
         }
     
@@ -75,20 +78,8 @@ namespace TFABot
             
             try
             {
-                try
-                {
-                    using (var git = new clsGit())
-                    {
-                        if (git.CheckFileVersion())
-                        {
-                            Console.WriteLine("NEW VERSION DETECTED");
-                            Console.WriteLine(git.Head?.ToString()??"HEAD is NULL?");
-                        }
-                    }
-                } catch (Exception ex)
-                {
-                    Console.WriteLine($"GIT QUERY FAILED {ex.Message}");
-                }
+                Console.WriteLine($"Git commit: {clsVersion.GitCommitHash}");
+                if (clsVersion.VersionChangeFlag)  Console.WriteLine("NEW VERSION DETECTED");
             
                 Console.WriteLine($"ARGS={Environment.CommandLine}");
                 BotURL = Environment.GetEnvironmentVariable("BOTURL");

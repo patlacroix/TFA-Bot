@@ -40,6 +40,18 @@ namespace TFABot.DiscordBot.Commands
                    case "previous":
                         Program.SetRunState(Program.enumRunState.PreviousVersion);
                         break;
+                   case "debug":
+                        var reg = new Regex(@".*:\d{1,5}").Match(commands[2]);
+                        if (reg.Success)
+                        {
+                            Environment.SetEnvironmentVariable("MONOARGS", $"--debug --debugger-agent=transport=dt_socket,address={reg.Value},server=y,suspend=y");
+                            Program.SetRunState(Program.enumRunState.MonoArgs);
+                        }
+                        else
+                            e.Channel.SendMessageAsync("incorrect host:port");
+                        
+                        
+                        break;
                    default:
                         e.Channel.SendMessageAsync("unknown command");
                         break;
@@ -61,6 +73,7 @@ bot reload\tReload spreadsheet (app settings require a restart).
 bot update\tUpdate to latest bot version (if available).
 bot restart\tRestart bot.
 bot previous\tSwitch back to previous version (if available).
+bot debug <host:port>\tDebug on remote IDE.
 bot exit\tStop bot. (ends docker instance)";
             }
         }        

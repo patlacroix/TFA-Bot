@@ -48,8 +48,11 @@ namespace TFABot.Git
             
             foreach (var branch in Repo.Branches.Where(x=>x.IsRemote))
             {
-               var BranchItem = new clsGitBranchInfo(this, branch, GetTag(branch));
-               BranchList.Add(BranchItem);
+               if (!branch.FriendlyName.EndsWith("/HEAD"))
+               {
+                  var BranchItem = new clsGitBranchInfo(this, branch, GetTag(branch));
+                  BranchList.Add(BranchItem);
+               }
             }
         }
               

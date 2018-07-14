@@ -20,21 +20,28 @@ namespace TFABot.DiscordBot.Commands
         
         public void Run(MessageCreateEventArgs e)
         {
+        
+            var msgSplit = e.Message.Content.Split(new char[]{' '});
+        
             var sb = new StringBuilder();
             sb.Append("```");
             try
             {
                 using (var git = new clsGit())
                 {
+                    if (msgSplit.Length>1) git.Switch(msgSplit[1]);
                     sb.AppendLine(git.ToString());
                 }
             }
             catch (Exception ex)
             {
-                sb.AppendLine($"Git unavailabe {ex.Message}");
+                sb.AppendLine($"Error: {ex.Message}");
             }
             
             sb.Append("```");
+            
+            if (msgSplit.Length>1) sb.AppendLine("\"bot update\" required to pull branch.");
+            
             e.Channel.SendMessageAsync(sb.ToString());
         }
         
@@ -42,7 +49,7 @@ namespace TFABot.DiscordBot.Commands
         {
             get
             {
-                return "git\ngit\t<branch/commit>\tCheckout git";
+                return "git\ngit <branch/commit>\tCheckout";
             }
         }
     }

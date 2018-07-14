@@ -43,8 +43,11 @@ do
           build
         elif [ $exitcode -eq 5 ] #MONO ARGS
         then
-          echo "RUN WITH MONO ARGS $MONOARGS"
-          mono $MONOARGS $APP_NAME
+          if [ ! -f $APP_DIR/mono_args.txt ]; then
+             MONOARGS=$(<$APP_DIR/monoargs.txt)
+             echo "RUN WITH MONO ARGS $MONOARGS"
+             mono $MONOARGS $APP_NAME
+          fi
         elif [ $exitcode -eq 0 ] #Shutdown
         then
           echo "SHUTDOWN"

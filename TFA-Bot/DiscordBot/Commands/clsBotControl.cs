@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using DSharpPlus.EventArgs;
 
@@ -44,7 +45,8 @@ namespace TFABot.DiscordBot.Commands
                         var reg = new Regex(@".*:\d{1,5}").Match(commands[2]);
                         if (reg.Success)
                         {
-                            Environment.SetEnvironmentVariable("MONOARGS", $"--debug --debugger-agent=transport=dt_socket,address={reg.Value},server=y,suspend=y");
+                            var filename = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),"mono_args.txt");
+                            File.WriteAllText(filename, $"--debug --debugger-agent=transport=dt_socket,address={reg.Value},server=y,suspend=y");
                             Program.SetRunState(Program.enumRunState.MonoArgs);
                         }
                         else

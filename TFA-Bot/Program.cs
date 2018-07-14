@@ -144,8 +144,6 @@ namespace TFABot
                        ApplicationHold.WaitOne(3000);
                     }
                 
-                
-                
                     Console.WriteLine($"Exit Code: {RunState} ({(int)RunState})");
                     
                     switch(RunState)

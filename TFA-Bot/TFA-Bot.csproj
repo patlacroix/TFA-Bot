@@ -127,6 +127,7 @@
     <Compile Include="clsColumnDisplay.cs" />
     <Compile Include="DiscordBot\Commands\clsGitCommand.cs" />
     <Compile Include="Git\clsGitHead.cs" />
+    <Compile Include="Git\GitCommit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

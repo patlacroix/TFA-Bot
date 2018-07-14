@@ -21,8 +21,6 @@ namespace TFABot
             Margin = margin;
         }
         
-        
-        
         public void AppendCol(String text)
         {
             Columns.Add(text);
@@ -69,7 +67,6 @@ namespace TFABot
             }
         }
         
-                
         public new string ToString()
         {
             foreach (var line in Lines)
@@ -85,7 +82,7 @@ namespace TFABot
                         }
                         else
                         {
-                            sb.AppendLine(new string(' ',ColumnMaxLen[f]+Margin));
+                            sb.Append(new string(' ',ColumnMaxLen[f]+Margin));
                         }
                     }
                     sb.AppendLine();
@@ -98,8 +95,8 @@ namespace TFABot
                 {
                     for (int f=0; f < colCountMax;f++)
                     {
-                        sb.Append(new string((char)line,ColumnMaxLen[f]+Margin));
-                        if (f < colCountMax-1) sb.Append("| ");
+                        sb.Append(new string((char)line,ColumnMaxLen[f]+Margin+1));
+                        if (f < colCountMax-1) sb.Append("|");
                     }
                 }
             }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using DSharpPlus.EventArgs;
@@ -39,6 +41,10 @@ namespace TFABot.DiscordBot.Commands
             }
             
             sb.Append("```");
+            
+            
+            var GitCommit = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GitCommit), false).Cast<GitCommit>().First();
+            Console.WriteLine($"Assembly {GitCommit.Hash}");
             
             if (msgSplit.Length>1) sb.AppendLine("\"bot update\" required to pull branch.");
             

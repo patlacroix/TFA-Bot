@@ -165,7 +165,11 @@ namespace TFABot.Git
             GetBranches();
              var cd = new clsColumnDisplay();
              
-             cd.AppendLine("Branches");
+             cd.AppendCol("Branch");
+             cd.AppendCol("Sha");
+             cd.AppendCol("Commit");
+             cd.AppendCol("Tag");
+             
              cd.AppendCharLine('~');
              
              foreach (var branch in BranchList)

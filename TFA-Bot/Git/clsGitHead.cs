@@ -10,10 +10,14 @@ namespace TFABot.Git
     
         public clsGitHead(clsGit git = null)
         {
-            if (git == null)
+           if (git == null)
             {
                 Git = new clsGit();
                 DisposeofGit = true;
+            }
+            else
+            {
+                Git = git;
             }
         }
         
@@ -69,10 +73,6 @@ namespace TFABot.Git
                     int commitcount = DiffCount;
                     sb.AppendLine(commitcount < 0 ? $"{-commitcount} commit(s) behind": $"{commitcount} commit(s) ahead of");
                     sb.Append ($" {BranchName} {RemoteShaShort} {RemoteCommiter} {RemoteDate:yyyy-MM-dd HH:mm} {RemoteTag}");
-                }
-                else
-                {
-                    sb.AppendLine("up to date");
                 }
             }
             else

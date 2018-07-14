@@ -41,7 +41,7 @@ namespace TFABot.Git
                     columnDisplay.Append ("Up to date");
                  else
                     if (TagHead?.FriendlyName!=null) columnDisplay.Append(TagHead.FriendlyName);
-                    columnDisplay.Append ($"{(Git.Repo.Head.Tip.Tree.Count - BranchRemote.Tip.Tree.Count):+0;-0}");
+                    columnDisplay.Append ($" {(Git.Repo.Head.Tip.Tree.Count - BranchRemote.Tip.Tree.Count):+0;-0}");
             }
         }
         

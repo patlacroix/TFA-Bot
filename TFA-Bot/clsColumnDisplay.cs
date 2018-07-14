@@ -10,8 +10,8 @@ namespace TFABot
         List<object> Lines = new List<object>();
         List<string> Columns = new List<string>();
         List<int> ColumnMaxLen = new List<int>();
-        int colCount = -1;
-        int colCountMax = 0;
+        //int colCount = -1;
+        int colCountMax = -1;
         StringBuilder sb = new StringBuilder();
     
         public int Margin {get; private set;}
@@ -27,43 +27,46 @@ namespace TFABot
         {
             Columns.Add(text);
             
-            if (++colCount > colCountMax) colCountMax=colCount;
+            if (Columns.Count > colCountMax) colCountMax = Columns.Count;
             
-            if (ColumnMaxLen.Count <= colCount)
+            if (ColumnMaxLen.Count < Columns.Count)
               ColumnMaxLen.Add(text.Length);
-            else if (ColumnMaxLen[colCount] < text.Length)
-              ColumnMaxLen[colCount] = text.Length;
+            else if (ColumnMaxLen[Columns.Count-1] < text.Length)
+              ColumnMaxLen[Columns.Count-1] = text.Length;
         }
         
           
         public void AppendLine(String text="")
         {
-            if (colCount>-1) NewLine();
+            NewLine();
             Lines.Add(text);
         }
         
         public void AppendCharLine(char linechar)
         {
+            NewLine();
             Lines.Add(linechar);
         }
         
         public void Append(string text)
         {
-            if (colCount==-1)
+            if (Columns.Count==0)
             {
                 Lines[Lines.Count-1] = Lines[Lines.Count-1]+text;
             }
             else
             {
-                Columns[colCount] = Columns[colCount]+text;
+                Columns[Columns.Count-1] = Columns[Columns.Count-1]+text;
             }
         }
         
         public void NewLine()
         {
-            Lines.Add(Columns.ToArray());
-            colCount=-1;
-            Columns.Clear();
+            if (Columns.Count>0)
+            {
+                Lines.Add(Columns.ToArray());
+                Columns.Clear();
+            }
         }
         
                 
@@ -73,9 +76,17 @@ namespace TFABot
             {
                 if (line is String[])
                 {
-                    for (int f=0; f < ((string[])line).Length;f++)
+                    for (int f=0; f < colCountMax;f++)
                     {
-                        sb.Append( ((string[])line)[f].PadRight(ColumnMaxLen[f]+Margin));
+                        if (f < ((string[])line).Length)
+                        {
+                            sb.Append( ((string[])line)[f].PadRight(ColumnMaxLen[f]+Margin));
+                            if (f < colCountMax-1) sb.Append("| ");
+                        }
+                        else
+                        {
+                            sb.AppendLine(new string(' ',ColumnMaxLen[f]+Margin));
+                        }
                     }
                     sb.AppendLine();
                 }
@@ -85,7 +96,11 @@ namespace TFABot
                 }
                 else if (line is char)
                 {
-                    sb.AppendLine(new string((char)line,ColumnMaxLen.Sum() + (colCountMax)));
+                    for (int f=0; f < colCountMax;f++)
+                    {
+                        sb.AppendLine(new string((char)line,ColumnMaxLen[f]+Margin));
+                        if (f < colCountMax-1) sb.Append("| ");
+                    }
                 }
             }
             return sb.ToString();

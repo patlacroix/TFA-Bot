@@ -131,7 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="BuildCommon.targets" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DiscordBot\" />

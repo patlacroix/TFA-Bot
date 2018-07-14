@@ -31,7 +31,7 @@ RUN git clone -b ${BRANCH} https://git.factoid.org/TFA/TFA-Bot.git
 RUN wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 WORKDIR /app/TFA-Bot
 RUN mono ../nuget.exe restore TFA-Bot.sln
-RUN msbuild -p:Configuration=Release TFA-Bot.sln
+RUN msbuild -p:Configuration=Release -property:GitCommit=$(git rev-parse HEAD) TFA-Bot.sln
 
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*

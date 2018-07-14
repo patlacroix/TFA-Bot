@@ -20,7 +20,6 @@ using TFABot;
 
 [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyGitCommit("")]
 
 // The following attributes are used to specify the signing key for the assembly, 
 // if desired. See the Mono documentation for more information about signing.

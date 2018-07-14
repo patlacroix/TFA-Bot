@@ -156,16 +156,19 @@ namespace TFABot
                     case enumRunState.Restart:
                         Program.Bot.Our_BotAlert.SendMessageAsync("Shutting down to restart. :relieved:").Wait(1000);;
                         break;
+                    case enumRunState.MonoArgs:
+                        Program.Bot.Our_BotAlert.SendMessageAsync("Shutting down to restart in Debug mode. :spy:").Wait(1000);;
+                        break;
                     case enumRunState.Stop:
                         Program.Bot.Our_BotAlert.SendMessageAsync("Goodbye! :sleeping:").Wait(1000);
                         break;
                 }
                 
-                return (int)enumRunState.Error;
+                return (int)RunState;
             } catch (Exception ex)
             {
                 Console.WriteLine($"ERROR: {ex.Message}");
-                return (int)RunState;
+                return (int)enumRunState.Error;
             }
         }
         

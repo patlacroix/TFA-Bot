@@ -50,7 +50,7 @@
 
                     using (StreamWriter sw = File.AppendText(path)) 
                     {
-                      var text = $"[assembly: AssemblyGitCommit(\"{GitHash}\")]"
+                      var text = $"[assembly: AssemblyGitCommit(\"{GitHash}\")]";
                       Log.LogMessage(text);
                       sw.WriteLine(text);
                     } 

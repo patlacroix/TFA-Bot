@@ -20,7 +20,7 @@
     </Copy>
     <!-- Replace the version bit (in AssemblyVersion and AssemblyFileVersion attributes) using regular expression. Use the defined property: $(GitCommit). -->
     <Message Text="Setting GitCommit to $(GitCommit)" />
-    <RegexUpdateFile Files="@(ModifiedAssemblyInfo)"
+    <AppendFile Files="@(ModifiedAssemblyInfo)"
                 GitHash="$(GitCommit)"
                 />
     <!-- Include the modified AssemblyInfo.cs/.vb file in "Compile" items (instead of the original). -->
@@ -29,7 +29,7 @@
     </ItemGroup>
 </Target>
 
-<UsingTask TaskName="RegexUpdateFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+<UsingTask TaskName="AppendFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
         <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
         <GitHash ParameterType="System.String" Required="true" />
@@ -38,7 +38,6 @@
         <Reference Include="System.Core" />
         <Using Namespace="System" />
         <Using Namespace="System.IO" />
-        <Using Namespace="System.Text.RegularExpressions" />
         <Using Namespace="Microsoft.Build.Framework" />
         <Using Namespace="Microsoft.Build.Utilities" />
         <Code Type="Fragment" Language="cs">
@@ -51,7 +50,9 @@
 
                     using (StreamWriter sw = File.AppendText(path)) 
                     {
-                      sw.WriteLine($"[assembly: AssemblyGitCommit(\"{GitHash}\")]");
+                      var text = $"[assembly: AssemblyGitCommit(\"{GitHash}\")]"
+                      Log.LogMessage(text);
+                      sw.WriteLine(text);
                     } 
                 }
                 return true;

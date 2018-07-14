@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="BuildCommon.targets" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DiscordBot\" />
@@ -148,11 +149,6 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\BuildCommon.targets" />
   <Import Project="..\packages\Mono.Posix.5.4.0.201\build\net45\Mono.Posix.targets" Condition="Exists('..\packages\Mono.Posix.5.4.0.201\build\net45\Mono.Posix.targets')" />
-  <Import Project="..\packages\MSBuild.Extension.Pack.1.9.1\build\net40\MSBuild.Extension.Pack.targets" Condition="Exists('..\packages\MSBuild.Extension.Pack.1.9.1\build\net40\MSBuild.Extension.Pack.targets')" />
-  <Target Name="BeforeBuild">
-    <Message Text="Updating AssemblyGitCommit to $(GitCommit)"></Message>
-    <AssemblyInfo AssemblyGitCommit="$(GitCommit)">
-    </AssemblyInfo>
-  </Target>
 </Project>

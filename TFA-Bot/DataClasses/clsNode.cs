@@ -80,7 +80,6 @@ namespace TFABot
                 AlarmHeightLow = new clsAlarm(clsAlarm.enumAlarmType.Height,$"WARNING: {Name} height low.",this);
                 ErrorMsg="HEIGHT LOW";
                 Program.AlarmManager.New(AlarmHeightLow);
-                RunMTRAsync();
              }
            }
         }
@@ -137,6 +136,7 @@ namespace TFABot
                 AlarmRequestFail = new clsAlarm(clsAlarm.enumAlarmType.NoResponse,$"WARNING: {Name} not responding.",this);
                 ErrorMsg="NOT RESPONDING";
                 Program.AlarmManager.New(AlarmRequestFail);
+                RunMTRAsync();
              }
            }
         }

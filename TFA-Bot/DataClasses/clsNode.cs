@@ -271,6 +271,8 @@ namespace TFABot
         public void RunMTRAsync()
         {
             try{
+                    Console.WriteLine($"Starting MTR on {Name} {Host}");
+                   
                     var process = new Process
                     {
                         StartInfo = { FileName = "/usr/bin/mtr",
@@ -285,7 +287,9 @@ namespace TFABot
         
                     process.Exited += (sender, eargs) =>
                     {
-                        if (AlarmHeightLow!=null) AlarmHeightLow.AddNote($"{Name}```{process.StandardOutput.ReadToEnd()}```");
+                        var mtrOutput = process.StandardOutput.ReadToEnd();
+                        Console.WriteLine(mtrOutput);
+                        if (AlarmRequestFail!=null) AlarmRequestFail.AddNote($"{Name}```{mtrOutput}```");
                         process.Dispose();
                     };
                     process.Start();

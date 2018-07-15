@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using DiscordBot;
+using DSharpPlus.Entities;
 
 namespace TFABot
 {
@@ -26,7 +30,9 @@ namespace TFABot
         public clsNode Node {get; private set;}
         public clsNetwork Network {get; private set;}
         public String Message;
-               
+        
+        List<string> Notes = new List<string>();
+       
         //New alarm, from node
         public clsAlarm(enumAlarmType alarmType, String message, clsNode node)
         {
@@ -60,20 +66,23 @@ namespace TFABot
            Program.NotificationPolicyList.TryGetValue(network.StallNotification,out notificationPolicy);
         }
         
-
-        ////New alarm 
-        //public clsAlarm(enumAlarmType alarmType, String message)
-        //{
-            
-        //}
-        
         public void Clear(string message = null)
         {
-            
             if (TimeDiscord.HasValue)
             {
-                if (String.IsNullOrEmpty(message)) message = $"{AlarmType} alarm cleared";
-                clsBotClient.Instance.Our_BotAlert.SendMessageAsync(message);
+                var sb = new StringBuilder();
+                if (String.IsNullOrEmpty(message))
+                    sb.AppendLine($"{AlarmType} alarm cleared");
+                else
+                    sb.AppendLine(message);
+                    
+                foreach( var line in Notes)
+                {
+                    sb.AppendLine(line);
+                }
+                Notes.Clear();
+                
+                clsBotClient.Instance.Our_BotAlert.SendMessageAsync(sb.ToString());
             }
         }
         
@@ -95,7 +104,14 @@ namespace TFABot
                     if (!TimeDiscord.HasValue && notificationPolicy.Discord>=0 && DateTime.UtcNow > Opened.AddSeconds(notificationPolicy.Discord))
                     {
                         TimeDiscord = DateTime.UtcNow;
-                        clsBotClient.Instance.Our_BotAlert.SendMessageAsync(Message);
+                        var sb = new StringBuilder();
+                        sb.AppendLine(Message);
+                        foreach( var line in Notes)
+                        {
+                            sb.AppendLine(line);
+                        }
+                        Notes.Clear();
+                        clsBotClient.Instance.Our_BotAlert.SendMessageAsync(sb.ToString());
                     }
                 }
             }
@@ -113,6 +129,10 @@ namespace TFABot
         {
             return $"{AlarmType.ToString().PadRight(15)} {Node?.Name.PadRight(15) ?? Network?.Name.PadRight(20) ?? ""} {Opened} {Message}";
         }
-        
+
+        internal void AddNote(String text)
+        {
+            Notes.Add(text);
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace TFABot.DiscordBot.Commands
                 {
                     String host = null;
                     
-                    var node=Program.NodesList.Values.FirstOrDefault(x => x.Host.ToLower() == arg || x.Name.ToLower() == arg);
+                    var node=Program.NodesList.Values.FirstOrDefault(x => x.Host.ToLower().Contains(arg) || x.Name.ToLower().Contains(arg));
                     if (node!=null)
                     {
                         host = node.Host;
@@ -39,6 +39,10 @@ namespace TFABot.DiscordBot.Commands
                         if (System.Net.IPAddress.TryParse(arg,out iPAddress))
                         {
                             host = iPAddress.ToString();
+                        }
+                        else
+                        {
+                            e.Channel.SendMessageAsync("Unknown host");
                         }
                     }
                     

@@ -31,8 +31,9 @@ namespace TFABot
         [ASheetColumnHeader("monitor")]
         public bool Monitor {get;set;}
         
-        public String ErrorMsg { get; private set;}
-                
+        public String ErrorMsg {get; private set;}
+
+        
         public int Latency
         {
           get{ return LatencyList.CurrentAverage; }
@@ -79,6 +80,7 @@ namespace TFABot
                 AlarmHeightLow = new clsAlarm(clsAlarm.enumAlarmType.Height,$"WARNING: {Name} height low.",this);
                 ErrorMsg="HEIGHT LOW";
                 Program.AlarmManager.New(AlarmHeightLow);
+                RunMTRAsync();
              }
            }
         }
@@ -130,7 +132,7 @@ namespace TFABot
                 }
                 if (!String.IsNullOrEmpty(ErrorMsg)) ErrorMsg="";
              }
-             else if (AlarmRequestFail ==null && _requestFailCount == 3)
+             else if (AlarmRequestFail ==null && _requestFailCount == 2)
              {
                 AlarmRequestFail = new clsAlarm(clsAlarm.enumAlarmType.NoResponse,$"WARNING: {Name} not responding.",this);
                 ErrorMsg="NOT RESPONDING";
@@ -138,14 +140,12 @@ namespace TFABot
              }
            }
         }
-        
-        
+                
         public async Task GetHeightAsync(int timeout = 2000)
         {
              await Task.Run(() => {GetHeight(timeout);});
         }
-        
-        
+                
         public void GetHeight(int timeout = 2000)
         {
             try {
@@ -220,8 +220,7 @@ namespace TFABot
             }
 
         }
-       
-        
+               
         async public void PingHostAsync()
         {
         
@@ -268,6 +267,30 @@ namespace TFABot
                 Program.SendAlert($"Ping error {Name} {ex.Message}");
             }
         }
+        
+        public void RunMTRAsync()
+        {
+                    var process = new Process
+                    {
+                        StartInfo = { FileName = "/usr/bin/mtr",
+                                      Arguments = $"-rw {Host}",
+                                      UseShellExecute = false,
+                                      RedirectStandardOutput = true,
+                                      // RedirectStandardError = true
+                                    },
+                            EnableRaisingEvents = true
+        
+                    };
+        
+                    process.Exited += (sender, eargs) =>
+                    {
+                        AlarmHeightLow.AddNote($"{Name}```{process.StandardOutput.ReadToEnd()}```");
+                        process.Dispose();
+                    };
+                    process.Start();
+        }
+        
+        
         
         public void Update(clsNode node)
         {

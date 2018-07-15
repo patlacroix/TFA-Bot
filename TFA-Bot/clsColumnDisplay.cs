@@ -95,7 +95,8 @@ namespace TFABot
                 {
                     for (int f=0; f < colCountMax;f++)
                     {
-                        sb.Append(new string((char)line,ColumnMaxLen[f]+Margin+1));
+                        sb.Append(new string((char)line,ColumnMaxLen[f]+Margin));
+                        if (f>0)sb.Append(line);
                         if (f < colCountMax-1) sb.Append("|");
                     }
                     sb.AppendLine();

@@ -8,17 +8,9 @@ namespace TFABot.Git
         clsGit Git;
         bool DisposeofGit = false;
     
-        public clsGitHead(clsGit git = null)
+        public clsGitHead(clsGit git)
         {
-           if (git == null)
-            {
-                Git = new clsGit();
-                DisposeofGit = true;
-            }
-            else
-            {
                 Git = git;
-            }
         }
         
         public String BranchName     {get{return Git.Repo.Head.FriendlyName;}}
@@ -49,9 +41,9 @@ namespace TFABot.Git
         {
             try
             {
-                using (var git = new clsGitHead())
+                using (var git = new clsGit())
                 {
-                    return git.ToString();
+                    return git.Head.ToString();
                 }
             }
             catch (Exception ex)
@@ -77,9 +69,8 @@ namespace TFABot.Git
                 
                 if (Git.Repo.Head.Tip.Sha!= clsVersion.GitCommitHash)
                 {
-                    sb.AppendLine($"NOTE: Compiled version does not not match HEAD {clsVersion.GitCommitHash.Substring(0,7)}");
+                    sb.AppendLine($"NOTE: Compiled version does not match HEAD {clsVersion.GitCommitHash.Substring(0,7)}");
                 }
-                
             }
             else
             {

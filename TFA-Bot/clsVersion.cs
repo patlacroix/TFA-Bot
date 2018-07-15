@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using TFABot.Git;
 
 namespace TFABot
 {
@@ -43,6 +44,22 @@ namespace TFABot
                 Console.WriteLine($"GetFileVersion Error {ex.Message}");
             }
             return null;
+        }
+        
+        
+        static public string CheckForUpdate()
+        {
+           try
+           { 
+               using (var git = new clsGit())
+               {
+                    return git.Head.RemoteSha != GitCommitHash ? git.Head.ToString() : null;
+               }
+           } catch (Exception ex)
+           {
+                Console.WriteLine($"CheckForUpdate Error:{ex.Message}");
+                return null;
+           }
         }
         
         static public bool CheckFileVersion()

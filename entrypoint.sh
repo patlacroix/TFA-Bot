@@ -1,8 +1,10 @@
 #!/bin/bash
 
 APP_NAME="TFA-Bot.exe"                                                                                                                                                                                                                                                         
-APP_DIR="/app/TFA-Bot/TFA-Bot/bin/Release" 
+APP_DIR="/app/TFA-Bot/TFA-Bot/bin/Release"
+APP_DIR_DEBUG="/app/TFA-Bot/TFA-Bot/bin/Debug" 
 BUILD_DIR="/app/TFA-Bot"
+BUILD_CONF="Release"
 
 [ -z "$BOTURL" ] && echo "BOTURL Google Spreadsheet URL missing" && exit 1;
 
@@ -11,7 +13,7 @@ function build
     cd $BUILD_DIR
     git pull
     mono ../nuget.exe restore TFA-Bot.sln    
-    msbuild -property:Configuration=Release -property:GitCommit=$(git rev-parse HEAD) TFA-Bot.sln
+    msbuild -property:Configuration=$BUILD_CONF -property:GitCommit=$(git rev-parse HEAD) TFA-Bot.sln
 }
 
 
@@ -39,13 +41,17 @@ do
         elif [ $exitcode -eq 3 ] #Update
         then
           echo "SOFTWARE UPDATE"
+          BUILD_CONF="Release"
           cp -fv $APP_NAME $APP_NAME_previous
           build
         elif [ $exitcode -eq 5 ] #MONO ARGS
         then
           if [ -f $APP_DIR/mono_args.txt ]; then
+             BUILD_CONF="Debug"
+             build
              MONOARGS="$(< $APP_DIR/mono_args.txt)"
              echo "RUN WITH MONO ARGS: $MONOARGS"
+             cd $APP_DIR_DEBUG
              mono $MONOARGS $APP_NAME
           fi
         elif [ $exitcode -eq 0 ] #Shutdown

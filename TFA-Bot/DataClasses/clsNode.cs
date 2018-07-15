@@ -270,6 +270,7 @@ namespace TFABot
         
         public void RunMTRAsync()
         {
+            try{
                     var process = new Process
                     {
                         StartInfo = { FileName = "/usr/bin/mtr",
@@ -284,10 +285,14 @@ namespace TFABot
         
                     process.Exited += (sender, eargs) =>
                     {
-                        AlarmHeightLow.AddNote($"{Name}```{process.StandardOutput.ReadToEnd()}```");
+                        if (AlarmHeightLow!=null) AlarmHeightLow.AddNote($"{Name}```{process.StandardOutput.ReadToEnd()}```");
                         process.Dispose();
                     };
                     process.Start();
+            }catch (Exception ex)
+            {
+                Console.WriteLine($"RunMTRAsync {ex.Message}");
+            }
         }
         
         

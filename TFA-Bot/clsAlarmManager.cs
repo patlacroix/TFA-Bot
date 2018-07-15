@@ -37,7 +37,14 @@ namespace TFABot
           
           foreach (var alarm in AlarmList)
           {
-            alarm.Process();
+            try
+            {
+                alarm.Process();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Alarm Process: {ex.Message}");
+            }
           }
           
         }

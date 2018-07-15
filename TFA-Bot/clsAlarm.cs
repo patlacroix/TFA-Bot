@@ -132,7 +132,15 @@ namespace TFABot
 
         internal void AddNote(String text)
         {
-            Notes.Add(text);
+        
+            if (TimeDiscord.HasValue)
+            {
+                clsBotClient.Instance.Our_BotAlert.SendMessageAsync(text);
+            }
+            else
+            {
+                Notes.Add(text);
+            }
         }
     }
 }

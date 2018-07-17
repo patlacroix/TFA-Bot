@@ -20,6 +20,11 @@ namespace DiscordBot
 {
     public class clsBotClient : IDisposable
     {
+        const ulong FactomServerID = 419201548372017163;
+        const ulong FactomOperatorAlertChannel = 443025488655417364;
+        const string FactomOperatorAlertChannelString =  "operators-alarts";
+        
+    
         private DiscordClient _client;
         private CancellationTokenSource _cts;
         private clsCommands Commands = new clsCommands();
@@ -32,7 +37,6 @@ namespace DiscordBot
         StringBuilder TextBuffer = new StringBuilder();
         
         public static clsBotClient Instance = null;
-        
 
         public clsBotClient(String Token)
         {
@@ -47,24 +51,19 @@ namespace DiscordBot
                 TokenType = TokenType.Bot,
                 UseInternalLogHandler = true
             });
-
-
             _client.SetWebSocketClient<WebSocketSharpClient>();
             _client.Ready += OnReadyAsync;
             _client.GuildAvailable += this.Client_GuildAvailable;
             _client.ClientErrored += this.Client_ClientError;
             _client.MessageCreated += MessageCreateEvent;
           //  _client.mess
-            
            
            Commands.LoadCommandClasses();
-           
         }
 
         //Incoming Discord Message
         private async Task MessageCreateEvent(MessageCreateEventArgs e)
         {
-        
             if (e.Author.IsBot) return;  //Reject our own messages
             
             if ( e.Channel == Factom_BotAlert)
@@ -73,12 +72,11 @@ namespace DiscordBot
                return;
             }
             
-            if (e.Channel.GuildId == 419201548372017163) return;  //Ignore Factom's Discord server
+            if (e.Channel.GuildId == FactomServerID) return;  //Ignore Factom's Discord server
             
             Commands.DiscordMessage(e); //Forward message to commands lookup.
             Console.Write(e.Message);
         }
-
 
         public async Task RunAsync()
         {
@@ -98,15 +96,26 @@ namespace DiscordBot
             TimeConnected = DateTime.Now;
         }
 
-
         //Discord Server connected
         private Task Client_GuildAvailable(GuildCreateEventArgs e)
         {
-
-            if (e.Guild.Id == 419201548372017163)  //Factom's Discord server
+            if (e.Guild.Id == FactomServerID)  //Factom's Discord server
             {
-                Factom_BotAlert = e.Guild.Channels.FirstOrDefault(x=>x.Id == 443025488655417364);
-                Console.WriteLine($"Factom Alert channel: {Factom_BotAlert.Name}");
+                Factom_BotAlert = e.Guild.Channels.FirstOrDefault(x=>x.Id == FactomOperatorAlertChannel);
+                if (Factom_BotAlert==null)
+                {
+                    Console.WriteLine("Warning: Factom ID not found");
+                    //We will try finding the name instead.
+                    Factom_BotAlert = e.Guild.Channels.FirstOrDefault(x=>x.Name.Contains(FactomOperatorAlertChannelString));
+                }
+                if (Factom_BotAlert == null)
+                {
+                    SendAlert("Warning: Factom operators-alarts not found");
+                }
+                else
+                {
+                    Console.WriteLine($"Factom Alert channel: {Factom_BotAlert.Name}");
+                }
             }
             else
             {
@@ -114,7 +123,12 @@ namespace DiscordBot
                 if (Program.SettingsList.TryGetValue("Discord-AlertsChannel",out alertChannelString))
                 {
                     alertChannelString = alertChannelString.ToLower().Replace("#","");
+#if DEBUG
+                    var alertChannel = e.Guild.Channels.FirstOrDefault(x=>x.Name.Contains("bot-test"));
+                    if (alertChannel==null) alertChannel = e.Guild.Channels.FirstOrDefault(x=>x.Name == alertChannelString);
+#else
                     var alertChannel = e.Guild.Channels.FirstOrDefault(x=>x.Name == alertChannelString);
+#endif                    
                     if (alertChannel!=null)
                     {
                        Our_BotAlert = alertChannel;
@@ -126,14 +140,18 @@ namespace DiscordBot
                          
                        if (TextBuffer.Length>0) Our_BotAlert.SendMessageAsync(TextBuffer.ToString()).ContinueWith((x)=>{TextBuffer.Clear();});
                     }
+                    else
+                    {
+                        Console.WriteLine($"ERROR: Cant find AlartChannel {alertChannelString}");
+                    }
                 }
                 else
                 {
+                    SendAlert("Warning: Factom operators-alarts not found");
                     Console.WriteLine("Warning: Discord-AlertsChannel not set");
                 }
             }
 
-            
             // since this method is not async, let's return
             // a completed task, so that no additional work
             // is done
@@ -166,7 +184,5 @@ namespace DiscordBot
             this._client.Dispose();
        
         }
-
-        
     }
 }

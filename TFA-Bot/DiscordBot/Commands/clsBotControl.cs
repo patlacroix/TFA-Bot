@@ -55,7 +55,7 @@ namespace TFABot.DiscordBot.Commands
                         
                         break;
                    default:
-                        e.Channel.SendMessageAsync("unknown command");
+                        e.Channel.SendMessageAsync("unknown 'bot' command.");
                         break;
                 }
             }

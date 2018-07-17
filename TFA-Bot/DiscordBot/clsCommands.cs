@@ -31,7 +31,7 @@ namespace TFABot.DiscordBot
                 var lowMessage = e.Message.Content.ToLower();
                 var firstword = lowMessage.Split(new []{' '},2,StringSplitOptions.RemoveEmptyEntries);            
                 
-                foreach (var command in MatchCommand.Where(x =>firstword[0].StartsWith(x.Item1)))
+                foreach (var command in MatchCommand.Where(x =>firstword[0] == x.Item1))
                 {
                     command.Item2.Run(e);
                 }

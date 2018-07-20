@@ -45,25 +45,8 @@ namespace TFABot
             TopHeight = height;
             LastHeight = DateTime.UtcNow;
             NextHeight = LastHeight.Value.AddSeconds(BlockTimeSeconds);
-        }
-        
-        public void CheckStall()
-        {
-            bool ok = true;
-            if (NextHeight.HasValue && DateTime.UtcNow > NextHeight.Value)
-            {
-                var seconds = (DateTime.UtcNow - NextHeight).Value.TotalSeconds;
-                if (seconds>BlockTimeSecondsAllowance)
-                {
-                    ok=false;
-                    if (++LateHeightCount==1)
-                    {
-                        NetworkAlarm = new clsAlarm(clsAlarm.enumAlarmType.Network,$"WARNING: Network Height {seconds:0} sec late.  {Name} Stall?",this);
-                        Program.AlarmManager.New(NetworkAlarm);
-                    }
-                }
-            }
-            if (LateHeightCount>0 && ok)
+            
+            if (LateHeightCount>0)
             {
                 LateHeightCount=0;
                 Program.AlarmManager.Clear(NetworkAlarm, $"CLEARED: Network Stall Alarm {Name}");
@@ -71,5 +54,20 @@ namespace TFABot
             }
         }
         
+        public void CheckStall()
+        {
+            if (NextHeight.HasValue && DateTime.UtcNow > NextHeight.Value)
+            {
+                var seconds = (DateTime.UtcNow - NextHeight).Value.TotalSeconds;
+                if (seconds>BlockTimeSecondsAllowance)
+                {
+                    if (++LateHeightCount==1)
+                    {
+                        NetworkAlarm = new clsAlarm(clsAlarm.enumAlarmType.Network,$"WARNING: Network Height {seconds:0} sec late.  {Name} Stall?",this);
+                        Program.AlarmManager.New(NetworkAlarm);
+                    }
+                }
+            }
+        }
     }
 }

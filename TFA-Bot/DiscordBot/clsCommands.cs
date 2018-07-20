@@ -15,20 +15,44 @@ namespace TFABot.DiscordBot
         List <(Regex,IBotCommand)> MatchRegex = new List<(Regex, IBotCommand)>();
     
         public static clsCommands Instance;
+        public static String BotCommandPrefix {get; set;}
+
     
         public clsCommands()
         {
             Instance = this;
+            string prefix;
+            if (Program.SettingsList.TryGetValue("BotCommandPrefix", out prefix))
+            {
+                 BotCommandPrefix = prefix;
+            }
         }
         
         
         public void DiscordMessage(MessageCreateEventArgs e)
         {
+        
+            String Message;
             try
             {
                 if (String.IsNullOrEmpty(e.Message.Content)) return;
                 
-                var lowMessage = e.Message.Content.ToLower();
+                if (String.IsNullOrEmpty(BotCommandPrefix))
+                {
+                    Message = e.Message.Content;
+                }
+                else if (e.Message.Content.StartsWith(BotCommandPrefix) &&
+                        (e.Message.Content.Length > BotCommandPrefix.Length))
+                {
+                    Message = e.Message.Content.Substring(BotCommandPrefix.Length);
+                }
+                else
+                {
+                    return;
+                }
+        
+                
+                var lowMessage = Message.ToLower();
                 var firstword = lowMessage.Split(new []{' '},2,StringSplitOptions.RemoveEmptyEntries);            
                 
                 foreach (var command in MatchCommand.Where(x =>firstword[0] == x.Item1))
@@ -41,7 +65,7 @@ namespace TFABot.DiscordBot
                     command.Item2.Run(e);
                 }
                 
-                foreach (var command in MatchRegex.Where(x =>x.Item1.IsMatch(e.Message.Content)))
+                foreach (var command in MatchRegex.Where(x =>x.Item1.IsMatch(Message)))
                 {
                     command.Item2.Run(e);
                 }

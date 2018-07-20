@@ -32,7 +32,6 @@ namespace TFABot
         public bool Monitor {get;set;}
         
         public String ErrorMsg {get; private set;}
-
         
         public int Latency
         {
@@ -56,8 +55,7 @@ namespace TFABot
                 }
             }
         }
-        
-        
+                
         clsAlarm AlarmHeightLow = null;
         uint _heightLowCount;
         public uint HeightLowCount
@@ -103,7 +101,7 @@ namespace TFABot
              }
              else if (_requestFailCount ==0 && AlarmLatencyLow==null && _latencyLowCount > 3)
              {
-                AlarmLatencyLow = new clsAlarm(clsAlarm.enumAlarmType.Height,$"WARNING: {Name} latency poor.",this);
+                AlarmLatencyLow = new clsAlarm(clsAlarm.enumAlarmType.Latency,$"WARNING: {Name} latency poor.",this);
                 ErrorMsg="LATENCY POOR";
                 Program.AlarmManager.New(AlarmLatencyLow);
              }
@@ -218,12 +216,10 @@ namespace TFABot
                 Console.WriteLine(ex.Message);
                 RequestFailCount++;
             }
-
         }
                
         async public void PingHostAsync()
         {
-        
             try
             {
                 var pingTask = Task.Run(() =>
@@ -298,9 +294,7 @@ namespace TFABot
                 Console.WriteLine($"RunMTRAsync {ex.Message}");
             }
         }
-        
-        
-        
+       
         public void Update(clsNode node)
         {
             if (Name != node.Name) throw new Exception("index name does not match");
@@ -324,12 +318,10 @@ namespace TFABot
             return (!Program.NodeGroupList.TryGetValue(Group,out NodeGroup)) ? "Error: Node Group Not Found!" : null;
         }
         
-        
         public new String ToString()
         {
             return $"{Name}\t{Host}\t{LeaderHeight}\t{LatencyList.CurrentAverage.ToString().PadLeft(3)} ms ({(100-PacketLoss.CurrentAverage):0.#}%) {ErrorMsg}";
         }
-        
         
     }
 }

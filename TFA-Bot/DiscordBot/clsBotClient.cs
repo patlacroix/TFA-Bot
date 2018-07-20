@@ -22,7 +22,7 @@ namespace DiscordBot
     {
         const ulong FactomServerID = 419201548372017163;
         const ulong FactomOperatorAlertChannel = 443025488655417364;
-        const string FactomOperatorAlertChannelString =  "operators-alarts";
+        const string FactomOperatorAlertChannelString =  "operators-alerts";
         
     
         private DiscordClient _client;
@@ -30,6 +30,7 @@ namespace DiscordBot
         private clsCommands Commands = new clsCommands();
 
         public DateTime TimeConnected {get; private set;}
+        
         
         public DSharpPlus.Entities.DiscordChannel Our_BotAlert = null;
         public DSharpPlus.Entities.DiscordChannel Factom_BotAlert = null;
@@ -56,11 +57,10 @@ namespace DiscordBot
             _client.GuildAvailable += this.Client_GuildAvailable;
             _client.ClientErrored += this.Client_ClientError;
             _client.MessageCreated += MessageCreateEvent;
-          //  _client.mess
-           
+          
            Commands.LoadCommandClasses();
-        }
 
+        }
         //Incoming Discord Message
         private async Task MessageCreateEvent(MessageCreateEventArgs e)
         {
@@ -73,11 +73,11 @@ namespace DiscordBot
             }
             
             if (e.Channel.GuildId == FactomServerID) return;  //Ignore Factom's Discord server
-            
+                        
             Commands.DiscordMessage(e); //Forward message to commands lookup.
             Console.Write(e.Message);
         }
-
+        
         public async Task RunAsync()
         {
             await _client.ConnectAsync();
@@ -168,14 +168,7 @@ namespace DiscordBot
 
         private Task Client_ClientError(ClientErrorEventArgs e)
         {
-            // let's log the details of the error that just 
-            // occured in our client
-            e.Client.DebugLogger.LogMessage(LogLevel.Error, "ExampleBot", $"Exception occured: {e.Exception.GetType()}: {e.Exception.Message}", DateTime.Now);
-          //  Console.WriteLine();
-            
-            // since this method is not async, let's return
-            // a completed task, so that no additional work
-            // is done
+            Console.WriteLine($"Bot Exception: {e.Exception.GetType()}: {e.Exception.Message}");
             return Task.CompletedTask;
         }   
 

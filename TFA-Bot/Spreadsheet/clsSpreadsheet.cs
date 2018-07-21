@@ -68,7 +68,6 @@ namespace TFABot
         
         public void ReadSheet<T>(String SheetName, Dictionary<string,T> MainList, StringBuilder sb)  where T : class
         {
-        
             try
             {
                 sb.Append($"Loading {SheetName}.....  ");

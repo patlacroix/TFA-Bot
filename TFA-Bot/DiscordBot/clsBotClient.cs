@@ -69,6 +69,7 @@ namespace DiscordBot
             if ( e.Channel == Factom_BotAlert)
             {
                Our_BotAlert.SendMessageAsync(e.Message.Content);
+               ProcessFactomAlarm(e.Message.Content);
                return;
             }
             
@@ -124,7 +125,7 @@ namespace DiscordBot
                 {
                     alertChannelString = alertChannelString.ToLower().Replace("#","");
 #if DEBUG
-                    var alertChannel = e.Guild.Channels.FirstOrDefault(x=>x.Name.Contains("bot-test"));
+                    var alertChannel = e.Guild.Channels.FirstOrDefault(x=>x.Name.Contains("bot-in-debug"));
                     if (alertChannel==null) alertChannel = e.Guild.Channels.FirstOrDefault(x=>x.Name == alertChannelString);
 #else
                     var alertChannel = e.Guild.Channels.FirstOrDefault(x=>x.Name == alertChannelString);
@@ -171,6 +172,47 @@ namespace DiscordBot
             Console.WriteLine($"Bot Exception: {e.Exception.GetType()}: {e.Exception.Message}");
             return Task.CompletedTask;
         }   
+
+        void ProcessFactomAlarm(String message)
+        {
+            bool emergency = message.Contains("EMERGENCY");
+            
+            List<string> keywordUsed = new List<string>();
+            List<string> toCall = new List<string>();
+            
+            foreach(var user in Program.UserList.Values.Where(x=>x.KeywordAlert!=null && x.OnDuty))
+            {
+                foreach (var keyword in user.KeywordAlert)
+                {
+                    if (emergency && keyword=="E" || (keyword !="E" && message.Contains(keyword)))
+                    {
+                        if (!keywordUsed.Contains(keyword)) keywordUsed.Add(keyword);
+                        if (!toCall.Contains(user.Name))  toCall.Add(user.Name);
+                    }
+                }
+            }
+            
+            foreach(var user in Program.UserList.Values.Where(x=>x.KeywordAlert!=null && !x.OnDuty))
+            {
+                foreach (var keyword in user.KeywordAlert.Where(x=>!keywordUsed.Contains(x)))
+                {
+                    if (emergency && keyword=="E" || (keyword !="E" && message.Contains(keyword)))
+                    {
+                        if (!keywordUsed.Contains(keyword)) keywordUsed.Add(keyword);
+                        if (!toCall.Contains(user.Name)) toCall.Add(user.Name);
+                    }
+                }
+            }
+            
+            
+            
+            foreach (var userName in toCall)
+            {
+              //  clsDialler.call(userName);
+                Console.WriteLine($"DEBUG: CALL {userName}");
+            }
+            
+        }
 
         public void Dispose()
         {

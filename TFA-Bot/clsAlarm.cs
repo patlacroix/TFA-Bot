@@ -39,7 +39,6 @@ namespace TFABot
             AlarmType = alarmType;
             Message = message;
             Node = node;
- 
                     
             switch(alarmType)
             {
@@ -53,7 +52,6 @@ namespace TFABot
                 case enumAlarmType.Network:
                     Program.NotificationPolicyList.TryGetValue(Node.NodeGroup.NetworkString,out notificationPolicy); break;
             }
-            
         }
         
         //New alarm from Network
@@ -131,8 +129,7 @@ namespace TFABot
         }
 
         internal void AddNote(String text)
-        {
-        
+        {        
             if (TimeDiscord.HasValue)
             {
                 clsBotClient.Instance.Our_BotAlert.SendMessageAsync(text);

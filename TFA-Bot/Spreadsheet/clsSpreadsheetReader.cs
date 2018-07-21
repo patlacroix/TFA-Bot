@@ -67,9 +67,24 @@ namespace TFABot
                     PropertyInfo pi;
                     if (columns.TryGetValue(c,out pi))
                     {
-                        if ( columns[c].PropertyType == typeof(TimeSpan) )
+                        if ( columns[c].PropertyType == typeof(TimeSpan))
                         {
                             columns[c].SetValue(dataClass,TimeSpan.Parse(data[r][c]));
+                        }
+                        else if ( columns[c].PropertyType == typeof(string[]))
+                        {
+                            var k = c;
+                            List<string> stringlist = new List<string>();
+                            for (; c < data[r].Length;c++)
+                            {
+                                if (c>properties.Count)
+                                {
+                                    sb.Append("Error: comma in column, which is not the last.");
+                                    break;
+                                }
+                                if (!String.IsNullOrEmpty(data[r][c])) stringlist.AddRange(data[r][c].Split(new char[]{';',' '},StringSplitOptions.RemoveEmptyEntries));
+                            }
+                            columns[k].SetValue(dataClass,stringlist.ToArray());
                         }
                         else
                         {

@@ -25,7 +25,9 @@ namespace TFABot
         public TimeSpan TimeFrom {get;set;}
         [ASheetColumnHeader("time to","timeto")]
         public TimeSpan TimeTo {get;set;}
-    
+        
+        [ASheetColumnHeader("keyword")]
+        public string[] KeywordAlert {get;set;}
         
         public void Update(clsUser user)
         {
@@ -38,6 +40,7 @@ namespace TFABot
             Weight = user.Weight;
             TimeFrom = user.TimeFrom;
             TimeTo = user.TimeTo;
+            KeywordAlert = user.KeywordAlert;
         }
         
         public String PostPopulate()

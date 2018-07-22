@@ -16,6 +16,9 @@ namespace TFABot.Git
         
         public clsGit(String gitDirectory = null)
         {
+#if DEBUG
+            if (Directory.Exists("/HOME/TFA-Bot")) gitDirectory = "/HOME/TFA-Bot";
+#endif      
             if (String.IsNullOrEmpty(gitDirectory)) gitDirectory = System.Reflection.Assembly.GetEntryAssembly().Location;
 
             var dir = new DirectoryInfo(gitDirectory);
@@ -29,7 +32,6 @@ namespace TFABot.Git
             Fetch();
             Head = new clsGitHead(this);
         }
-     
        
         public void Fetch()
         {

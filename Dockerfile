@@ -22,7 +22,7 @@ RUN apt-get update \
 
 RUN mkdir -p /app
 WORKDIR /app
-RUN git clone https://github.com/SIPp/sipp.git
+RUN git clone https://github.com/SIPp/sipp.git#v3.5.2
 WORKDIR /app/sipp
 RUN ./build.sh
 

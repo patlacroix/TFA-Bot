@@ -69,7 +69,7 @@ namespace TFABot.Git
                 
                 if (Git.Repo.Head.Tip.Sha!= clsVersion.GitCommitHash)
                 {
-                    sb.AppendLine($"NOTE: Compiled version does not match HEAD {clsVersion.GitCommitHash.Substring(0,7)}");
+                    sb.AppendLine($"\nNOTE: Compiled version does not match HEAD {clsVersion.GitCommitHash.Substring(0,7)}");
                 }
             }
             else

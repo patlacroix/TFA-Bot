@@ -17,7 +17,6 @@ namespace TFABot
         {
         }
         
-        
         public clsNodeGroup NodeGroup;
         
         public uint LatencyLowest { get; private set;}
@@ -32,6 +31,7 @@ namespace TFABot
         public bool Monitor {get;set;}
         
         public String ErrorMsg {get; private set;}
+        public String NodeVersion {get; private set;}
         
         public int Latency
         {
@@ -51,6 +51,7 @@ namespace TFABot
                 if (_leaderHeight < value)
                 {
                     _leaderHeight = value;
+                    if (!LastLeaderHeight.HasValue) GetVersionAsync();  //Get version no if leader now known.
                     LastLeaderHeight = DateTime.UtcNow;
                 }
             }
@@ -106,8 +107,8 @@ namespace TFABot
                 Program.AlarmManager.New(AlarmLatencyLow);
              }
            }
-        }        
-        
+        }
+
 
         clsAlarm AlarmRequestFail = null;
         uint _requestFailCount;
@@ -126,6 +127,7 @@ namespace TFABot
                 {
                     Program.AlarmManager.Clear(AlarmRequestFail,$"CLEARED: {Name} now responding.");
                     AlarmRequestFail = null;
+                    GetVersionAsync();
                 }
                 if (!String.IsNullOrEmpty(ErrorMsg)) ErrorMsg="";
              }
@@ -166,12 +168,10 @@ namespace TFABot
                 
                 if(response.ResponseStatus == ResponseStatus.Completed)
                 {                    
-                    
                    var content = response.Content; // raw content as string
                    
                    var pos1 = 0;
                    var pos2= 0;
-                   
                    
                     if (!string.IsNullOrEmpty(content))
                     {
@@ -217,7 +217,63 @@ namespace TFABot
                 RequestFailCount++;
             }
         }
-               
+
+        public async Task GetVersionAsync(int timeout = 2000)
+        {
+             await Task.Run(() => {GetVersion(timeout);});
+        }
+
+        public void GetVersion(int timeout = 2000)
+        {
+            try {
+                var client = new RestClient($"http://{Host}:8088");
+                        
+                client.Timeout = timeout;                    
+                        
+                var request = new RestRequest("v2", Method.POST);
+                request.AddHeader("Content-type", "application/json");
+                request.AddHeader("header", "value");
+                request.AddJsonBody(
+                    new { jsonrpc = "2.0", id = 0, method = "properties" }
+                );
+                  
+                // execute the request
+                IRestResponse response = client.Execute(request);
+                
+                if(response.ResponseStatus == ResponseStatus.Completed)
+                {                    
+                   var content = response.Content; // raw content as string
+                   
+                   var pos1 = 0;
+                   var pos2= 0;
+                   
+                    if (!string.IsNullOrEmpty(content))
+                    {
+                        pos1 = content.IndexOf("factomdversion\":");
+                        pos1+=17;
+                        pos2 = content.IndexOf("\"",pos1);
+                        if (pos2>pos1) NodeVersion = content.Substring(pos1,pos2-pos1);
+                    }
+                    else
+                    {
+                        ErrorMsg="Empty version data";
+                    }
+                    
+               } else if(response.ResponseStatus == ResponseStatus.Error || response.ResponseStatus == ResponseStatus.TimedOut)
+               {
+                    ErrorMsg=response.ErrorMessage;
+               }
+               else if(response.ResponseStatus == ResponseStatus.None)
+               {
+                    ErrorMsg="Empty data";
+               }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+      
         async public void PingHostAsync()
         {
             try
@@ -321,6 +377,16 @@ namespace TFABot
         public new String ToString()
         {
             return $"{Name}\t{Host}\t{LeaderHeight}\t{LatencyList.CurrentAverage.ToString().PadLeft(3)} ms ({(100-PacketLoss.CurrentAverage):0.#}%) {ErrorMsg}";
+        }
+        
+        public void AppendDisplayColumns(ref clsColumnDisplay columnDisplay)
+        {
+            columnDisplay.AppendCol(Name);
+            columnDisplay.AppendCol(Host);
+            columnDisplay.AppendCol(NodeVersion);
+            columnDisplay.AppendCol($"{LeaderHeight}");
+            columnDisplay.AppendCol($"{LatencyList.CurrentAverage.ToString().PadLeft(3)} ms ({(100-PacketLoss.CurrentAverage):0.#}%) {ErrorMsg}");
+            
         }
         
     }

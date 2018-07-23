@@ -18,7 +18,7 @@ namespace TFABot.DiscordBot.Commands
         
         public void Run(MessageCreateEventArgs e)
         {
-            e.Channel.SendMessageAsync(TFABot.Program.GetNodes());
+            e.Channel.SendMessageAsync($"```{TFABot.Program.GetNodes()}```");
         }
         
         public String HelpString

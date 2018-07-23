@@ -190,34 +190,25 @@ namespace TFABot
 
         static public String GetNodes()
         {
-                var sb = new StringBuilder();
-                sb.Append("```");
-                
-                sb.AppendLine("Node        | Host                 |   Height   | Ave reply");
-                sb.AppendLine("------------|----------------------|------------|-----------");
-                
-                foreach (var group in NodeGroupList)
-                {
-                    foreach (var node in NodesList.Values.Where(x=>x.Group == group.Key))
-                    {
-                        var nodetext = node.ToString().Split('\t');
-                        if (nodetext.Length==4)
-                        {
-                            sb.Append($"{nodetext[0].PadRight(12)}");  //Node
-                            sb.Append($"| {nodetext[1].Replace("http://","").PadRight(21)}"); //URL
-                            sb.Append($"| {nodetext[2].PadRight(11)}"); //Height
-                            sb.Append($"| {nodetext[3]}"); //Ave reply
-                        }else
-                        {
-                            sb.Append(node);
-                        }
-                        sb.AppendLine();
-                    }
-                }
+            var cd = new clsColumnDisplay();
+             
+            cd.AppendCol("Node");
+            cd.AppendCol("Host");
+            cd.AppendCol("Ver");
+            cd.AppendCol("Height");
+            cd.AppendCol("Ave reply");
+             
+            cd.AppendCharLine('-');
 
-                sb.Append("```");
-                return sb.ToString();
+            foreach (var group in NodeGroupList)
+            {
+                foreach (var node in NodesList.Values.Where(x=>x.Group == group.Key))
+                {
+                    node.AppendDisplayColumns(ref cd);
+                    cd.NewLine();
+                }
+            }
+            return cd.ToString();
         }
-       
     }
 }

@@ -14,7 +14,7 @@ namespace TFABot
         DateTime? TimeDiscord;
         DateTime? TimeCall;
         DateTime? Timeout;
-        
+        DateTime? DelayUntil;
         public clsNotificationPolicy notificationPolicy;
         
         public enumAlarmType AlarmType {get; private set;}
@@ -53,6 +53,15 @@ namespace TFABot
                     Program.NotificationPolicyList.TryGetValue(Node.NodeGroup.NetworkString,out notificationPolicy); break;
             }
         }
+        
+        //New alarm
+        public clsAlarm(enumAlarmType alarmType, String message, TimeSpan delay)
+        {
+                AlarmType = alarmType;
+                Message = message;
+                DelayUntil = DateTime.UtcNow.Add(delay);
+        }
+        
         
         //New alarm from Network
         public clsAlarm(enumAlarmType alarmType, String message, clsNetwork network)
@@ -117,8 +126,11 @@ namespace TFABot
             {
                 if (!TimeDiscord.HasValue)
                 {
-                    Program.Bot.Our_BotAlert.SendMessageAsync(Message);
-                    TimeDiscord = DateTime.UtcNow;
+                    if (!DelayUntil.HasValue || DelayUntil.Value < DateTime.UtcNow)
+                    {
+                        Program.Bot.Our_BotAlert.SendMessageAsync(Message);
+                        TimeDiscord = DateTime.UtcNow;
+                    }
                 }
             }
         }

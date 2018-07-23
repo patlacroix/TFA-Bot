@@ -381,9 +381,9 @@ namespace TFABot
         
         public void AppendDisplayColumns(ref clsColumnDisplay columnDisplay)
         {
-            columnDisplay.AppendCol(Name);
-            columnDisplay.AppendCol(Host);
-            columnDisplay.AppendCol(NodeVersion);
+            columnDisplay.AppendCol(Name ?? "?");
+            columnDisplay.AppendCol(Host ?? "?");
+            columnDisplay.AppendCol(NodeVersion??"");
             columnDisplay.AppendCol($"{LeaderHeight}");
             columnDisplay.AppendCol($"{LatencyList.CurrentAverage.ToString().PadLeft(3)} ms ({(100-PacketLoss.CurrentAverage):0.#}%) {ErrorMsg}");
             

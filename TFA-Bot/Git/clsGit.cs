@@ -129,7 +129,7 @@ namespace TFABot.Git
              cd.AppendCol("Commit");
              cd.AppendCol("Tag");
              
-             cd.AppendCharLine('~');
+             cd.AppendCharLine('-');
              
              foreach (var branch in BranchList)
              {

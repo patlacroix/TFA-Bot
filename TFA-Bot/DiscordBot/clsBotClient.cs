@@ -24,6 +24,7 @@ namespace DiscordBot
         const ulong FactomOperatorAlertChannel = 443025488655417364;
         const string FactomOperatorAlertChannelString =  "operators-alerts";
         
+        clsAlarm AlarmNoFactomChannel;
     
         private DiscordClient _client;
         private CancellationTokenSource _cts;
@@ -59,6 +60,8 @@ namespace DiscordBot
             _client.MessageCreated += MessageCreateEvent;
           
            Commands.LoadCommandClasses();
+           
+           AlarmNoFactomChannel = new clsAlarm(clsAlarm.enumAlarmType.Error, "Factom #operators-alert channel not connected. Please make sure you have had permission set.", new TimeSpan(0,1,0));
 
         }
         //Incoming Discord Message
@@ -103,6 +106,7 @@ namespace DiscordBot
             if (e.Guild.Id == FactomServerID)  //Factom's Discord server
             {
                 Factom_BotAlert = e.Guild.Channels.FirstOrDefault(x=>x.Id == FactomOperatorAlertChannel);
+                AlarmNoFactomChannel.Clear();
                 if (Factom_BotAlert==null)
                 {
                     Console.WriteLine("Warning: Factom ID not found");
@@ -117,6 +121,9 @@ namespace DiscordBot
                 {
                     Console.WriteLine($"Factom Alert channel: {Factom_BotAlert.Name}");
                 }
+            //    var test = Factom_BotAlert.PermissionOverwrites;
+             //   ;
+              //  //var test2 = Factom_BotAlert.PermissionsFor(e.Client.CurrentUser.);
             }
             else
             {

@@ -33,7 +33,7 @@ namespace TFABot.Git
             {
                     if (Git.Repo?.Head?.Tip?.Sha == null) return 0;
                     //if (Git.Repo == null ||  Git.Repo.Head?.Tip == null ?? true) return 0;
-                    return Git.Repo.Head.Tip.Tree?.Count ?? 0 - Git.Repo.Head.TrackedBranch?.Tip?.Tree?.Count ?? 0;
+                    return (Git.Repo.Head.Tip.Tree?.Count ?? 0) - (Git.Repo.Head.TrackedBranch?.Tip?.Tree?.Count ?? 0);
             }
         }
         

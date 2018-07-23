@@ -62,6 +62,7 @@ namespace DiscordBot
            Commands.LoadCommandClasses();
            
            AlarmNoFactomChannel = new clsAlarm(clsAlarm.enumAlarmType.Error, "Factom #operators-alert channel not connected. Please make sure you have had permission set.", new TimeSpan(0,1,0));
+           Program.AlarmManager.New(AlarmNoFactomChannel);
 
         }
         //Incoming Discord Message
@@ -106,7 +107,6 @@ namespace DiscordBot
             if (e.Guild.Id == FactomServerID)  //Factom's Discord server
             {
                 Factom_BotAlert = e.Guild.Channels.FirstOrDefault(x=>x.Id == FactomOperatorAlertChannel);
-                AlarmNoFactomChannel.Clear();
                 if (Factom_BotAlert==null)
                 {
                     Console.WriteLine("Warning: Factom ID not found");
@@ -120,10 +120,21 @@ namespace DiscordBot
                 else
                 {
                     Console.WriteLine($"Factom Alert channel: {Factom_BotAlert.Name}");
+                    
+                    var me = e.Guild.Members.FirstOrDefault(x=>x.Id == _client.CurrentUser.Id);
+                    if (me!=null)
+                    {
+                        var permissions = Factom_BotAlert.PermissionsFor(me);
+                        if (permissions.HasPermission(Permissions.AccessChannels))
+                        {
+                            Program.AlarmManager.Clear(AlarmNoFactomChannel);
+                        }
+                    }
+                    else
+                    {
+                        SendAlert("Warning: My user not found in Discord");
+                    }   
                 }
-            //    var test = Factom_BotAlert.PermissionOverwrites;
-             //   ;
-              //  //var test2 = Factom_BotAlert.PermissionsFor(e.Client.CurrentUser.);
             }
             else
             {
@@ -168,6 +179,7 @@ namespace DiscordBot
 
         public void SendAlert(String text)
         {
+            Console.WriteLine(text);
             if (Our_BotAlert != null)
                 Our_BotAlert.SendFileAsync(text);
             else

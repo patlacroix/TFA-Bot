@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Linq;
 
 namespace TFABot.Git
 {
@@ -32,8 +33,18 @@ namespace TFABot.Git
             get
             {
                     if (Git.Repo?.Head?.Tip?.Sha == null) return 0;
-                    //if (Git.Repo == null ||  Git.Repo.Head?.Tip == null ?? true) return 0;
-                    return (Git.Repo.Head.Tip.Tree?.Count ?? 0) - (Git.Repo.Head.TrackedBranch?.Tip?.Tree?.Count ?? 0);
+                    if (Git.Repo?.Head?.TrackedBranch?.Tip?.Sha == null) return 0;
+                    int count=0;
+                    int? head = null;
+                    int? newversion = null;
+                    foreach(var commits in Git.Repo.Head.TrackedBranch.Commits)
+                    {
+                          if (commits.Sha == Git.Repo.Head.Tip.Sha) head=count;
+                          if (commits.Sha == Git.Repo.Head.TrackedBranch.Tip.Sha) newversion=count;
+                          if (head.HasValue && newversion.HasValue) break;
+                          count++;
+                    }
+                    return newversion.Value - head.Value;
             }
         }
         

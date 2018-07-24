@@ -209,7 +209,7 @@ namespace TFABot
                  ErrorMsg="Empty data";
                }
                
-               Console.WriteLine(ToString());
+              // Console.WriteLine(ToString());
             }
             catch (Exception ex)
             {

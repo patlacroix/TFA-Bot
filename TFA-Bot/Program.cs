@@ -108,6 +108,7 @@ namespace TFABot
                  
                 Console.WriteLine("Starting monitoring");
                 const int apiTimeout = 2000;
+                DateTime LastBotStart = DateTime.UtcNow;
                 using (Bot = new clsBotClient(DiscordToken))
                 {
                     Bot.RunAsync();
@@ -140,7 +141,20 @@ namespace TFABot
                         }
                         
                        AlarmManager.Process();
-                        
+                       
+                       //Check the status of the Discord connection.  If it disconnects, it doesn't always restart.
+                       if (!Bot.LastHeartbeatd.HasValue || (DateTime.UtcNow - Bot.LastHeartbeatd.Value).TotalSeconds > 90)
+                       {
+                            if ( (DateTime.UtcNow - LastBotStart).TotalSeconds>120)
+                            {
+                                Console.WriteLine("Bot not connected. Restarting.....");
+                                Bot._client.DisconnectAsync();
+                                Thread.Sleep(1000);
+                                LastBotStart = DateTime.UtcNow;
+                                Bot._client.ConnectAsync();
+                            }
+                       }
+                          
                        ApplicationHold.WaitOne(3000);
                     }
                 

@@ -26,11 +26,12 @@ namespace DiscordBot
         
         clsAlarm AlarmNoFactomChannel;
     
-        private DiscordClient _client;
+        public DiscordClient _client;
         private CancellationTokenSource _cts;
         private clsCommands Commands = new clsCommands();
 
         public DateTime TimeConnected {get; private set;}
+        public DateTime? LastHeartbeatd {get; private set;}
         
         
         public DSharpPlus.Entities.DiscordChannel Our_BotAlert = null;
@@ -58,6 +59,7 @@ namespace DiscordBot
             _client.GuildAvailable += this.Client_GuildAvailable;
             _client.ClientErrored += this.Client_ClientError;
             _client.MessageCreated += MessageCreateEvent;
+            _client.Heartbeated += Heartbeated;
           
            Commands.LoadCommandClasses();
            
@@ -100,6 +102,12 @@ namespace DiscordBot
             await Task.Yield();
             TimeConnected = DateTime.Now;
         }
+        
+        private async Task Heartbeated(HeartbeatEventArgs eventArgs)
+        {
+            LastHeartbeatd = DateTime.UtcNow;
+        }
+        
 
         //Discord Server connected
         private Task Client_GuildAvailable(GuildCreateEventArgs e)

@@ -44,7 +44,7 @@ namespace TFABot
         }
         
         
-        static public void call(String name, DSharpPlus.Entities.DiscordChannel ChBotAlert = null)
+        static public void call(String names, DSharpPlus.Entities.DiscordChannel ChBotAlert = null)
         {
             if (Dialler==null)
             {
@@ -57,18 +57,24 @@ namespace TFABot
                 }
             }
             
-            name = name.Replace("call ","").ToLower().Trim();
             
-            clsUser user;
-            if (!Program.UserList.TryGetValue(name,out user))
+            foreach (var nameItem in names.Split(new char []{' '}, StringSplitOptions.RemoveEmptyEntries))
             {
-              user = Program.UserList.Values.FirstOrDefault(x=>x.DiscordName.ToLower()==name || x.Name.ToLower()==name);
+                var name = nameItem.ToLower();
+                if (!name.EndsWith("all"))
+                {
+                    clsUser user;
+                    if (!Program.UserList.TryGetValue(name,out user))
+                    {
+                      user = Program.UserList.Values.FirstOrDefault(x=>x.DiscordName.ToLower()==name || x.Name.ToLower()==name);
+                    }
+                    
+                    if (user!=null) 
+                        Dialler.CallAsync(user.DiscordName,user.Tel,ChBotAlert);
+                    else if (ChBotAlert!=null)
+                       ChBotAlert.SendMessageAsync("name not found!");
+                }
             }
-            
-            if (user!=null) 
-                Dialler.CallAsync(user.DiscordName,user.Tel,ChBotAlert);
-            else if (ChBotAlert!=null)
-               ChBotAlert.SendMessageAsync("name not found!");
             
         }
         

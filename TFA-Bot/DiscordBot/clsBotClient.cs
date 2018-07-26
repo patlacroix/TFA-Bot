@@ -74,7 +74,8 @@ namespace DiscordBot
             
             if ( e.Channel == Factom_BotAlert)
             {
-               Our_BotAlert.SendMessageAsync(e.Message.Content);
+                
+               Our_BotAlert.SendMessageAsync($"#operators-alert:```{e.Message.Content}```");
                ProcessFactomAlarm(e.Message.Content);
                return;
             }
@@ -231,12 +232,9 @@ namespace DiscordBot
                 }
             }
             
-            
-            
             foreach (var userName in toCall)
             {
-              //  clsDialler.call(userName);
-                Console.WriteLine($"DEBUG: CALL {userName}");
+                clsDialler.call(userName);
             }
             
         }

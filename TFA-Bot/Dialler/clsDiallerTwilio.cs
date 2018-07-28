@@ -15,6 +15,7 @@ namespace TFABot.Dialler
         String Password;
         String Host;
         String CallingNumber;
+        String TwimletURL;
     
         public clsDiallerTwilio()
         {
@@ -22,6 +23,10 @@ namespace TFABot.Dialler
             Password = Environment.GetEnvironmentVariable("SIP-PASSWORD") ?? Program.SettingsList["SIP-Password"];
             Host = Program.SettingsList["SIP-Host"];
             CallingNumber = Program.SettingsList["SIP-CallingNumber"];
+            
+            Program.SettingsList.TryGetValue("TwimletURL",out TwimletURL);
+            if (String.IsNullOrEmpty(TwimletURL)) TwimletURL = "http://demo.twilio.com/docs/voice.xml";
+            
         }
         
         
@@ -39,7 +44,7 @@ namespace TFABot.Dialler
                     client.Authenticator = new HttpBasicAuthenticator(Username, Password);
                             
                     var request = new RestRequest("Calls", Method.POST);
-                    request.AddParameter("Url", "http://demo.twilio.com/docs/voice.xml");
+                    request.AddParameter("Url", TwimletURL);
                     request.AddParameter("To", $"{Number}");
                     request.AddParameter("From", $"{CallingNumber}");
       

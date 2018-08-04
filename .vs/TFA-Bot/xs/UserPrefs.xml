@@ -1,18 +1,25 @@
 ﻿<Properties StartupConfiguration="{25609AB4-A77A-4B47-AAB8-B2DB39464A3F}|Default">
   <MonoDevelop.Ide.Workbench ActiveDocument="TFA-Bot Status">
     <Files>
-      <File FileName="TFA-Bot/Program.cs" Line="88" Column="18" />
-      <File FileName="TFA-Bot/clsAlarmManager.cs" Line="27" Column="23" />
-      <File FileName="TFA-Bot/Dialler/clsDialler.cs" Line="26" Column="57" />
-      <File FileName="TFA-Bot/DataClasses/clsNode.cs" Line="212" Column="17" />
-      <File FileName="TFA-Bot/DiscordBot/clsCommands.cs" Line="34" Column="9" />
-      <File FileName="TFA-Bot/clsAlarm.cs" Line="76" Column="21" />
-      <File FileName="TFA-Bot/DataClasses/clsNetwork.cs" Line="26" Column="16" />
-      <File FileName="TFA-Bot/Git/clsGitHead.cs" Line="42" Column="1" />
-      <File FileName="TFA-Bot/Git/clsGit.cs" Line="54" Column="71" />
-      <File FileName="TFA-Bot/Git/clsGitBranchInfo.cs" Line="26" Column="29" />
       <File FileName="TFA-Bot Status" />
+      <File FileName="TFA-Bot/DataClasses/clsNode.cs" Line="66" Column="37" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="TFA-Bot" expanded="True">
+            <Node name="TFA-Bot" expanded="True">
+              <Node name="DataClasses" expanded="True" />
+              <Node name="DiscordBot" expanded="True">
+                <Node name="clsBotClient.cs" selected="True" />
+              </Node>
+              <Node name="Properties" expanded="True" />
+              <Node name="Spreadsheet" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

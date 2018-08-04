@@ -19,7 +19,7 @@ namespace TFABot
         public String email {get;set;}
         [ASheetColumnHeader("zone")]
         public String TimeZone {get;set;}
-        [ASheetColumnHeader("tel")]
+        [ASheetColumnHeader("weight")]
         public int Weight {get;set;}
         [ASheetColumnHeader("time from","timefrom")]
         public TimeSpan TimeFrom {get;set;}
@@ -54,7 +54,6 @@ namespace TFABot
             {
                 return $"Error: {Name} has invalid Timezone {ex.Message}";
             }
-         
         }
         
         public DateTime GetUserTime()

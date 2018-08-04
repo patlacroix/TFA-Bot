@@ -12,15 +12,12 @@ namespace TFABot
     {
         public String URL {get; private set;}
         
-        
-        
         public clsSpreadsheetReader(String url)
         {
                 var reg = new Regex(@"^https.*[^\/]{40,}");
                 var match = reg.Match(url);
                 URL=match.Value;
         }
-        
         
         //Generic sheet reader.
         public List<T> ReadSheet<T>(String SheetName,StringBuilder sb) where T : class
@@ -49,13 +46,14 @@ namespace TFABot
                     {
                         columns.Add(c,property);
                         if (property.GetCustomAttribute<ASheetColumnHeader>().IsIndex) indexColumn = c;
-                    }
+                    }       
                 }
                 if (indexColumn !=-1) break;  //We got our index, so move to read the userdata
             } 
             
+            int firstrow=++r;
             //Read the data, and populate new target classes.
-            for (r++; r < data.Length;r++)
+            for (; r < data.Length;r++)
             {
                 if (data[r].Contains("<END>")) break;  //End of userdata.
             
@@ -69,7 +67,11 @@ namespace TFABot
                     {
                         if ( columns[c].PropertyType == typeof(TimeSpan))
                         {
-                            columns[c].SetValue(dataClass,TimeSpan.Parse(data[r][c]));
+                            TimeSpan timeSpan;
+                            if (TimeSpan.TryParse(data[r][c].Trim(),out timeSpan))
+                                columns[c].SetValue(dataClass,timeSpan);
+                            else
+                                sb.Append($"Error: Cannont read Time {Convert.ToChar(65+c)}{firstrow+r}\n");
                         }
                         else if ( columns[c].PropertyType == typeof(string[]))
                         {
@@ -79,7 +81,7 @@ namespace TFABot
                             {
                                 if (c>properties.Count)
                                 {
-                                    sb.Append("Error: comma in column, which is not the last.");
+                                    sb.Append("Error: Too many columns. Please check data does not have commas.\n");
                                     break;
                                 }
                                 if (!String.IsNullOrEmpty(data[r][c])) stringlist.AddRange(data[r][c].Split(new char[]{';',' '},StringSplitOptions.RemoveEmptyEntries));
@@ -88,22 +90,27 @@ namespace TFABot
                         }
                         else
                         {
-                            columns[c].SetValue(dataClass,System.Convert.ChangeType(data[r][c],columns[c].PropertyType));
+                            try
+                            {
+                                var ob = System.Convert.ChangeType(data[r][c].Trim(),columns[c].PropertyType);
+                                columns[c].SetValue(dataClass,ob);
+                            }
+                            catch (Exception ex)
+                            {
+                                sb.Append($"Error: Cannont read {Convert.ToChar(65+c)}{firstrow+r} {ex.Message}\n");
+                            }
                         }
                     }
                 }
-                
                 sb.Append(((ISpreadsheet<T>)dataClass).PostPopulate()??"");
             }
            
            return list;
-            
         }
         
         
         String[][] GetSpreadsheetData(String SheetName)
         {
-        
             var client = new RestClient(URL);
             var request = new RestRequest("gviz/tq");
             
@@ -138,7 +145,6 @@ namespace TFABot
             }
             else
             {
-            
                 throw new Exception($"Get spreadsheet data failed {response.ErrorMessage}");
             }
             

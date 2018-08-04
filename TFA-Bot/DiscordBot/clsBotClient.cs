@@ -156,7 +156,6 @@ namespace DiscordBot
                     if (alertChannel==null) alertChannel = e.Guild.Channels.FirstOrDefault(x=>x.Name == alertChannelString);
 #else
                     var alertChannel = e.Guild.Channels.FirstOrDefault(x=>x.Name == alertChannelString);
-#endif                    
                     if (alertChannel!=null)
                     {
                        Our_BotAlert = alertChannel;
@@ -172,6 +171,7 @@ namespace DiscordBot
                     {
                         Console.WriteLine($"ERROR: Cant find AlartChannel {alertChannelString}");
                     }
+#endif                                    
                 }
                 else
                 {

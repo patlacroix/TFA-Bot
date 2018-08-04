@@ -29,7 +29,7 @@ namespace TFABot
         public static DateTime ToAbvTimeZone(this DateTime date,String abvTimeZone)
         {
                 
-            abvTimeZone = abvTimeZone.ToUpper();
+            abvTimeZone = abvTimeZone.Trim().ToUpper();
             
             if (abvTimeZone == "UTC") return TimeZoneInfo.ConvertTimeToUtc(date);
                         

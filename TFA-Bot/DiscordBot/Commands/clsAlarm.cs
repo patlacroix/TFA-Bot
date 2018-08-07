@@ -7,7 +7,8 @@ namespace TFABot.DiscordBot.Commands
 {
     public class clsAlarm : IBotCommand
     {
-    
+        Regex regex_timeout = new Regex(@"(<?\s)\d*[mhs]");
+        
         public String[] MatchCommand {get; private set;}
         public String[] MatchSubstring {get; private set;}
         public Regex[] MatchRegex {get; private set;}
@@ -19,20 +20,30 @@ namespace TFABot.DiscordBot.Commands
         
         public void Run(MessageCreateEventArgs e)
         {
-        
             var lower = e.Message.Content.ToLower();
-        
+            
+            TimeSpan? timeout = null;
+            var regmatch = regex_timeout.Match(lower);
+            if (regmatch.Success)
+            {
+                var val = int.Parse(regmatch.Value.Substring(regmatch.Value.Length-2));
+                if (regmatch.Value.EndsWith("h")) timeout= new TimeSpan(val,0,0);
+                else if (regmatch.Value.EndsWith("m")) timeout= new TimeSpan(0,val,0);
+                else if (regmatch.Value.EndsWith("s")) timeout= new TimeSpan(0,0,val);
+            }
+            
+                    
             if (lower.Contains("off"))
             {
-                Program.AlarmState = EnumAlarmState.Off;
+                Program.SetAlarmState(EnumAlarmState.Off,timeout);
             }
             else if (lower.Contains("on"))
             {
-                Program.AlarmState = EnumAlarmState.On;
+                Program.SetAlarmState(EnumAlarmState.On,timeout);
             }
             else if (lower.Contains("silent"))
             {
-                Program.AlarmState = EnumAlarmState.On;
+                Program.SetAlarmState(EnumAlarmState.Silent,timeout);
             }
             else if (lower.Contains("list"))
             {
@@ -43,7 +54,10 @@ namespace TFABot.DiscordBot.Commands
                 e.Channel.SendMessageAsync(clsCommands.Instance.GetHelpString(this));
             }
                 
-            e.Channel.SendMessageAsync($"Alarm State: {AlarmState.ToString()}");
+            if (Program.AlarmStateTimeout.HasValue)
+                e.Channel.SendMessageAsync($"Alarm State: {AlarmState.ToString()} Resets in: {(DateTime.UtcNow - Program.AlarmStateTimeout.Value):hh:mm:ss}");
+            else
+                e.Channel.SendMessageAsync($"Alarm State: {AlarmState.ToString()}");
         }
         
         public String HelpString
@@ -52,9 +66,9 @@ namespace TFABot.DiscordBot.Commands
             {
                 return 
 @"alarm\tGet state.
-alarm on\tActive.
+alarm on [<int><h,m,s>]\tActive.
 alarm off\tNo Alarms.
-alarm silent\tDiscord warnings only.
+alarm silent [<int><h,m,s>]\tDiscord warnings only.
 alarm list\tList active alarms.";
 
             }

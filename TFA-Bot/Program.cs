@@ -51,6 +51,7 @@ namespace TFABot
         static public DateTime AlarmOffTime;
         static public uint AlarmOffWarningMultiplier;
         
+        static public  DateTime? AlarmStateTimeout;
         static public  EnumAlarmState _alarmState = EnumAlarmState.On;
         static public  EnumAlarmState AlarmState 
         {    get
@@ -58,7 +59,7 @@ namespace TFABot
                 return _alarmState;
              }
         
-             set
+             private set
              {
                 if (_alarmState != value)
                 {
@@ -134,7 +135,11 @@ namespace TFABot
                             network.CheckStall();
                         }
                         
-                        if (AlarmState == EnumAlarmState.Off && (DateTime.UtcNow - AlarmOffTime).TotalMinutes > (AlarmOffWarningMinutes*(AlarmOffWarningMultiplier+1))) 
+                        if (AlarmStateTimeout.HasValue)
+                        {
+                            if (AlarmStateTimeout.Value < DateTime.UtcNow) AlarmState = EnumAlarmState.On;
+                        }
+                        else if (AlarmState == EnumAlarmState.Off && (DateTime.UtcNow - AlarmOffTime).TotalMinutes > (AlarmOffWarningMinutes*(AlarmOffWarningMultiplier+1))) 
                         {
                             Bot.Our_BotAlert.SendMessageAsync($"Warning, the Alarm has been off {(DateTime.UtcNow - AlarmOffTime).TotalMinutes:0} minutes.  Forget to reset it?");
                             AlarmOffWarningMultiplier++;
@@ -224,5 +229,12 @@ namespace TFABot
             }
             return cd.ToString();
         }
+        
+        static public void SetAlarmState(EnumAlarmState state, TimeSpan? timeout = null)
+        {
+            if (timeout.HasValue) AlarmStateTimeout = DateTime.UtcNow.Add(timeout.Value);
+            AlarmState = state;
+        }
+        
     }
 }

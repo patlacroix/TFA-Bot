@@ -50,14 +50,13 @@ namespace TFABot
                 //Check the height, against heighest known height
                 if (node.LeaderHeight > Network.TopHeight) //New highest LearderHeight.
                 {
-                
                     if (Network.TopHeight > 0 && (node.LeaderHeight - Network.TopHeight > 10))
                     {
                         //Suspect wrong network setting
-                        if (Network.NetworkAlarm==null)
+                        if (!node.SyncMode)
                         {
-                            Network.NetworkAlarm = new clsAlarm(clsAlarm.enumAlarmType.Error,$"WARNING: {node.Name} height too high!  Wrong Bot setting?",Network);
-                            Program.AlarmManager.New(Network.NetworkAlarm);
+                            Program.SendAlert($"WARNING: {node.Name} height too high!  Wrong Bot setting?");
+                            node.SyncMode=true;
                         }
                     }
                     else
@@ -70,11 +69,7 @@ namespace TFABot
                 {
                     if (Network.TopHeight - node.LeaderHeight > 10) //If by a large amount, maybe Wrong setting or syncing?
                     {
-                        if (Network.NetworkAlarm==null)
-                        {
-                            Network.NetworkAlarm = new clsAlarm(clsAlarm.enumAlarmType.Error,$"WARNING: {node.Name} height low for network.  Wrong Bot setting or syncing?",Network);
-                            Program.AlarmManager.New(Network.NetworkAlarm);
-                        }
+                        if (!node.SyncMode) node.SyncMode=true;
                     }
                     else
                     {
@@ -84,11 +79,6 @@ namespace TFABot
                 else  //All good
                 {   
                     node.HeightLowCount=0;
-                    if (Network.NetworkAlarm!=null)
-                    {
-                        Program.AlarmManager.Clear(Network.NetworkAlarm,$"{Network.Name} clear.");
-                        Network.NetworkAlarm = null;
-                    }
                 }
                                     
                 //Check latency

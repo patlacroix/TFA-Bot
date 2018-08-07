@@ -56,6 +56,8 @@ namespace TFABot
                 }
             }
         }
+
+        clsAlarm AlarmSyncing = null;
                 
         clsAlarm AlarmHeightLow = null;
         uint _heightLowCount;
@@ -68,6 +70,7 @@ namespace TFABot
            set
            {
              _heightLowCount = value;
+             if (AlarmSyncing!=null && _heightLowCount==0)  SyncMode=false;  //Reset sync mode if active
              if (_heightLowCount==0 && AlarmHeightLow!=null)
              {
                 Program.AlarmManager.Clear(AlarmHeightLow,$"CLEARED: {Name} height low.");
@@ -120,6 +123,8 @@ namespace TFABot
            }
            set
            {
+             if (_requestFailCount == value) return; //no change
+             
              _requestFailCount = value;
              if (_requestFailCount==0)
              {
@@ -130,6 +135,7 @@ namespace TFABot
                     GetVersionAsync();
                 }
                 if (!String.IsNullOrEmpty(ErrorMsg)) ErrorMsg="";
+                if (NodeGroup.Network.TopHeight > LeaderHeight) SyncMode=true;
              }
              else if (AlarmRequestFail ==null && _requestFailCount == 2)
              {
@@ -217,6 +223,31 @@ namespace TFABot
                 RequestFailCount++;
             }
         }
+        
+        public bool SyncMode
+        {
+            get
+            {
+                return AlarmSyncing!=null;
+            }
+            set
+            {
+                if (value)
+                {
+                    if (AlarmSyncing==null)
+                    {
+                        AlarmSyncing = new clsAlarm(clsAlarm.enumAlarmType.Error,"{Name} in SYNC MODE.",this);
+                        ErrorMsg="SYNC MODE";
+                        Program.AlarmManager.New(AlarmRequestFail);
+                    }
+                }
+                else if (AlarmSyncing != null)
+                {
+                    Program.AlarmManager.Clear(AlarmSyncing,$"{Name} SYNC cleared.");
+                }
+            }
+        }
+        
 
         public async Task GetVersionAsync(int timeout = 2000)
         {

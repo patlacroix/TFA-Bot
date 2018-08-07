@@ -7,7 +7,7 @@ namespace TFABot.DiscordBot.Commands
 {
     public class clsAlarm : IBotCommand
     {
-        Regex regex_timeout = new Regex(@"(<?\s)\d*[mhs]");
+        Regex regex_timeout = new Regex(@"(?<=\s)\d*[mhs]");
         
         public String[] MatchCommand {get; private set;}
         public String[] MatchSubstring {get; private set;}
@@ -26,7 +26,7 @@ namespace TFABot.DiscordBot.Commands
             var regmatch = regex_timeout.Match(lower);
             if (regmatch.Success)
             {
-                var val = int.Parse(regmatch.Value.Substring(regmatch.Value.Length-2));
+                var val = int.Parse(regmatch.Value.Substring(0,regmatch.Value.Length-2));
                 if (regmatch.Value.EndsWith("h")) timeout= new TimeSpan(val,0,0);
                 else if (regmatch.Value.EndsWith("m")) timeout= new TimeSpan(0,val,0);
                 else if (regmatch.Value.EndsWith("s")) timeout= new TimeSpan(0,0,val);

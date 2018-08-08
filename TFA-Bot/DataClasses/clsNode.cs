@@ -83,7 +83,7 @@ namespace TFABot
            set
            {
              _heightLowCount = value;
-             if (AlarmSyncing!=null && _heightLowCount==0)  SyncMode=false;  //Reset sync mode if active
+             if (SyncMode && _heightLowCount==0)  SyncMode=false;  //Reset sync mode if active
              if (!SyncMode)
              {
                  if (_heightLowCount==0 && AlarmHeightLow!=null)
@@ -254,6 +254,7 @@ namespace TFABot
                 else if (AlarmSyncing != null)
                 {
                     Program.AlarmManager.Clear(AlarmSyncing,$"{Name} SYNC cleared.");
+                    AlarmSyncing=null;
                 }
             }
         }

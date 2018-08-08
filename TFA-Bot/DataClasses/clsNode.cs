@@ -62,7 +62,8 @@ namespace TFABot
                     }
                     else
                     {
-                       GetVersionAsync();  //Get version no if leader now known.
+                        if (_leaderHeight < NodeGroup.Network.TopHeight) SyncMode = true;
+                        GetVersionAsync();  //Get version no if leader now known.
                     }
                     LastLeaderHeight = DateTime.UtcNow;
                 }
@@ -83,17 +84,20 @@ namespace TFABot
            {
              _heightLowCount = value;
              if (AlarmSyncing!=null && _heightLowCount==0)  SyncMode=false;  //Reset sync mode if active
-             if (_heightLowCount==0 && AlarmHeightLow!=null)
+             if (!SyncMode)
              {
-                Program.AlarmManager.Clear(AlarmHeightLow,$"CLEARED: {Name} height low.");
-                AlarmHeightLow = null;
-                ErrorMsg="";
-             }
-             else if (_heightLowCount > 3 && _requestFailCount ==0 && AlarmHeightLow==null )
-             {
-                AlarmHeightLow = new clsAlarm(clsAlarm.enumAlarmType.Height,$"WARNING: {Name} height low.",this);
-                ErrorMsg="HEIGHT LOW";
-                Program.AlarmManager.New(AlarmHeightLow);
+                 if (_heightLowCount==0 && AlarmHeightLow!=null)
+                 {
+                    Program.AlarmManager.Clear(AlarmHeightLow,$"CLEARED: {Name} height low.");
+                    AlarmHeightLow = null;
+                    ErrorMsg="";
+                 }
+                 else if (_heightLowCount > 3 && _requestFailCount ==0 && AlarmHeightLow==null )
+                 {
+                    AlarmHeightLow = new clsAlarm(clsAlarm.enumAlarmType.Height,$"WARNING: {Name} height low.",this);
+                    ErrorMsg="HEIGHT LOW";
+                    Program.AlarmManager.New(AlarmHeightLow);
+                 }
              }
            }
         }
@@ -419,7 +423,7 @@ namespace TFABot
         
         public new String ToString()
         {
-            return $"{Name}\t{Host}\t{LeaderHeight}\t{LatencyList.CurrentAverage.ToString().PadLeft(3)} ms ({(100-PacketLoss.CurrentAverage):0.#}%) {ErrorMsg}";
+            return $"{Name}\t{Host}\t{LeaderHeight}\t{LatencyList.CurrentAverage.ToString().PadLeft(3)} ms ({(100-PacketLoss.CurrentAverage):0.#}%) {ErrorMsg??""}";
         }
         
         public void AppendDisplayColumns(ref clsColumnDisplay columnDisplay)
@@ -428,7 +432,7 @@ namespace TFABot
             columnDisplay.AppendCol(Host ?? "?");
             columnDisplay.AppendCol(NodeVersion??"");
             columnDisplay.AppendCol($"{LeaderHeight}");
-            columnDisplay.AppendCol($"{LatencyList.CurrentAverage.ToString().PadLeft(3)} ms ({(100-PacketLoss.CurrentAverage):0.#}%) {ErrorMsg}");
+            columnDisplay.AppendCol($"{LatencyList.CurrentAverage.ToString().PadLeft(3)} ms ({(100-PacketLoss.CurrentAverage):0.#}%) {ErrorMsg??""}");
             
         }
         

@@ -53,11 +53,8 @@ namespace TFABot
                     if (Network.TopHeight > 0 && (node.LeaderHeight - Network.TopHeight > 10))
                     {
                         //Suspect wrong network setting
-                        if (!node.SyncMode)
-                        {
-                            Program.SendAlert($"WARNING: {node.Name} height too high!  Wrong Bot setting?");
-                            node.SyncMode=true;
-                        }
+                        Program.SendAlert($"WARNING: {node.Name} height too high!  Wrong Bot setting?");
+                        node.SyncMode=true;
                     }
                     else
                     {

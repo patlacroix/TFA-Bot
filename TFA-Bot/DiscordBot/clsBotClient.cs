@@ -49,7 +49,7 @@ namespace DiscordBot
             {
                 AutoReconnect = true,
                 EnableCompression = true,
-                LogLevel = LogLevel.Debug,
+                LogLevel = LogLevel.Error,
                 Token = Token,
                 TokenType = TokenType.Bot,
                 UseInternalLogHandler = true

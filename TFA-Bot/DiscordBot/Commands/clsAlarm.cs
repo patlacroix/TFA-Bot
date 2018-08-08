@@ -7,7 +7,7 @@ namespace TFABot.DiscordBot.Commands
 {
     public class clsAlarm : IBotCommand
     {
-        Regex regex_timeout = new Regex(@"(?<=\s)\d*[mhs]");
+        Regex regex_timeout = new Regex(@"(?<=\s)\d{1,5}[mhs]");
         
         public String[] MatchCommand {get; private set;}
         public String[] MatchSubstring {get; private set;}

@@ -248,7 +248,7 @@ namespace TFABot
                     if (AlarmSyncing==null)
                     {
                         AlarmSyncing = new clsAlarm(clsAlarm.enumAlarmType.Syncing,"{Name} in SYNC mode.",this);
-                        Program.AlarmManager.New(AlarmRequestFail);
+                        Program.AlarmManager.New(AlarmSyncing);
                     }
                 }
                 else if (AlarmSyncing != null)

@@ -50,7 +50,7 @@ namespace TFABot
         
         public static string ToHMSDisplay(this TimeSpan ts)
         {
-            return $"{ts.TotalHours}h {ts.Minutes}m {ts.Seconds}s";
+            return $"{(int)ts.TotalHours}h {ts.Minutes}m {ts.Seconds}s";
         }
 
         

@@ -69,6 +69,10 @@ namespace TFABot
                         AlarmOffTime = DateTime.UtcNow;
                         AlarmOffWarningMultiplier=0;
                     }
+                    else if (value == EnumAlarmState.On)
+                    {
+                        AlarmStateTimeout = null;
+                    }
                 }
              }
         }

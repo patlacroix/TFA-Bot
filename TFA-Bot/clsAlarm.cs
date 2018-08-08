@@ -21,6 +21,7 @@ namespace TFABot
         public enum enumAlarmType
         {
             Error,
+            Syncing,
             NoResponse,
             Height,
             Latency,

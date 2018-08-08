@@ -51,7 +51,19 @@ namespace TFABot
                 if (_leaderHeight < value)
                 {
                     _leaderHeight = value;
-                    if (!LastLeaderHeight.HasValue) GetVersionAsync();  //Get version no if leader now known.
+                    if (LastLeaderHeight.HasValue)
+                    {
+                        if (_leaderHeight < NodeGroup.Network.TopHeight &&  //We are behind the network.
+                          (DateTime.UtcNow - LastLeaderHeight.Value).TotalMinutes>1 )  //Been offline for > 1 minute?
+                          {
+                            SyncMode = true;   
+                            GetVersionAsync();  //Get version no if leader now known.
+                          }
+                    }
+                    else
+                    {
+                       GetVersionAsync();  //Get version no if leader now known.
+                    }
                     LastLeaderHeight = DateTime.UtcNow;
                 }
             }
@@ -236,7 +248,7 @@ namespace TFABot
                 {
                     if (AlarmSyncing==null)
                     {
-                        AlarmSyncing = new clsAlarm(clsAlarm.enumAlarmType.Error,"{Name} in SYNC MODE.",this);
+                        AlarmSyncing = new clsAlarm(clsAlarm.enumAlarmType.Syncing,"{Name} in SYNC MODE.",this);
                         ErrorMsg="SYNC MODE";
                         Program.AlarmManager.New(AlarmRequestFail);
                     }

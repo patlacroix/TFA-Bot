@@ -39,7 +39,7 @@ namespace TFABot.DiscordBot.Commands
             }
             else if (lower.Contains("on"))
             {
-                Program.SetAlarmState(EnumAlarmState.On,timeout);
+                Program.SetAlarmState(EnumAlarmState.On);
             }
             else if (lower.Contains("silent"))
             {
@@ -66,8 +66,8 @@ namespace TFABot.DiscordBot.Commands
             {
                 return 
 @"alarm\tGet state.
-alarm on [<int><h,m,s>]\tActive.
-alarm off\tNo Alarms.
+alarm on\tActive.
+alarm off [<int><h,m,s>]\tNo Alarms.
 alarm silent [<int><h,m,s>]\tDiscord warnings only.
 alarm list\tList active alarms.";
 

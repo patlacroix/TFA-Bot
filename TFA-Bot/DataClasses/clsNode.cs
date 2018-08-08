@@ -48,9 +48,10 @@ namespace TFABot
             }
             private set
             {
-                if (_leaderHeight < value)
+                if (_leaderHeight != value)
                 {
                     _leaderHeight = value;
+                    
                     if (LastLeaderHeight.HasValue)
                     {
                         if (_leaderHeight < NodeGroup.Network.TopHeight &&  //We are behind the network.
@@ -62,7 +63,6 @@ namespace TFABot
                     }
                     else
                     {
-                        if (_leaderHeight < NodeGroup.Network.TopHeight) SyncMode = true;
                         GetVersionAsync();  //Get version no if leader now known.
                     }
                     LastLeaderHeight = DateTime.UtcNow;
@@ -90,12 +90,10 @@ namespace TFABot
                  {
                     Program.AlarmManager.Clear(AlarmHeightLow,$"CLEARED: {Name} height low.");
                     AlarmHeightLow = null;
-                    ErrorMsg="";
                  }
                  else if (_heightLowCount > 3 && _requestFailCount ==0 && AlarmHeightLow==null )
                  {
                     AlarmHeightLow = new clsAlarm(clsAlarm.enumAlarmType.Height,$"WARNING: {Name} height low.",this);
-                    ErrorMsg="HEIGHT LOW";
                     Program.AlarmManager.New(AlarmHeightLow);
                  }
              }
@@ -117,12 +115,10 @@ namespace TFABot
              {
                 Program.AlarmManager.Clear(AlarmLatencyLow,$"CLEARED:  {Name} poor latency cleared.");
                 AlarmLatencyLow = null;
-                ErrorMsg="";
              }
              else if (_requestFailCount ==0 && AlarmLatencyLow==null && _latencyLowCount > 3)
              {
                 AlarmLatencyLow = new clsAlarm(clsAlarm.enumAlarmType.Latency,$"WARNING: {Name} latency poor.",this);
-                ErrorMsg="LATENCY POOR";
                 Program.AlarmManager.New(AlarmLatencyLow);
              }
            }
@@ -156,7 +152,6 @@ namespace TFABot
              else if (AlarmRequestFail ==null && _requestFailCount == 2)
              {
                 AlarmRequestFail = new clsAlarm(clsAlarm.enumAlarmType.NoResponse,$"WARNING: {Name} not responding.",this);
-                ErrorMsg="NOT RESPONDING";
                 Program.AlarmManager.New(AlarmRequestFail);
                 RunMTRAsync();
              }
@@ -252,8 +247,7 @@ namespace TFABot
                 {
                     if (AlarmSyncing==null)
                     {
-                        AlarmSyncing = new clsAlarm(clsAlarm.enumAlarmType.Syncing,"{Name} in SYNC MODE.",this);
-                        ErrorMsg="SYNC MODE";
+                        AlarmSyncing = new clsAlarm(clsAlarm.enumAlarmType.Syncing,"{Name} in SYNC mode.",this);
                         Program.AlarmManager.New(AlarmRequestFail);
                     }
                 }
@@ -417,7 +411,7 @@ namespace TFABot
         
         public string PostPopulate()
         {
-            ErrorMsg = Monitor ? "" : "MONITOR OFF";
+            ErrorMsg = "";
             return (!Program.NodeGroupList.TryGetValue(Group,out NodeGroup)) ? "Error: Node Group Not Found!" : null;
         }
         
@@ -432,7 +426,25 @@ namespace TFABot
             columnDisplay.AppendCol(Host ?? "?");
             columnDisplay.AppendCol(NodeVersion??"");
             columnDisplay.AppendCol($"{LeaderHeight}");
-            columnDisplay.AppendCol($"{LatencyList.CurrentAverage.ToString().PadLeft(3)} ms ({(100-PacketLoss.CurrentAverage):0.#}%) {ErrorMsg??""}");
+            columnDisplay.AppendCol($"{LatencyList.CurrentAverage.ToString().PadLeft(3)} ms ({(100-PacketLoss.CurrentAverage):0.#}%) ");
+            
+            if (!Monitor)
+            {
+                 columnDisplay.Append ("MONITOR OFF");
+            }
+            else if (AlarmRequestFail !=null)
+            {
+                 columnDisplay.Append ("NOT RESPONDING");
+            }
+            else
+            {
+                if (AlarmHeightLow!=null) columnDisplay.Append ("HEIGHT LOW ");
+                if (AlarmSyncing!=null) columnDisplay.Append ("SYNCING ");
+                if (AlarmLatencyLow !=null) columnDisplay.Append ("LATENCY LOW ");
+            }
+            
+            if (String.IsNullOrEmpty(ErrorMsg)) columnDisplay.Append(ErrorMsg);
+            
             
         }
         

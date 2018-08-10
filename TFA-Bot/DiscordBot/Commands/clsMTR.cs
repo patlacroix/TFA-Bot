@@ -42,7 +42,7 @@ namespace TFABot.DiscordBot.Commands
                         }
                         else
                         {
-                            e.Channel.SendMessageAsync("Unknown host");
+                            e.Channel.SendMessageAsync($"'{iPAddress}' Unknown host");
                         }
                     }
                     

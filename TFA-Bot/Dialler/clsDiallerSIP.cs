@@ -25,47 +25,52 @@ namespace TFABot.Dialler
         
         public Task CallAsync(String Name, String Number, DSharpPlus.Entities.DiscordChannel ChBotAlert = null)
         {
-            var tcs = new TaskCompletionSource<bool>();
+            Task task;
             try
             {
                 if (ChBotAlert == null) ChBotAlert = clsBotClient.Instance.Our_BotAlert;
 
-                String sipp = "/app/sipp/sipp";
-                String timeout = "30s";
-                String dialplanPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Data/dialplan.xml");
-
-                String perms = $"{Host} -au {Username} -ap {Password} -l 1 -m 1 -sf {dialplanPath} -timeout {timeout} -s {Number.Replace(" ", "")}";
-
-                var process = new Process
+                task = Task.Run(()=>
                 {
-                    StartInfo = { FileName = sipp,
-                              Arguments = perms,
-                              UseShellExecute = false
-                           //   RedirectStandardOutput = true,
-                            //  RedirectStandardError = true
-                             },
-                    EnableRaisingEvents = true
-
-                };
-
-                process.Exited += (sender, args) =>
-                {
-                    ChBotAlert.SendMessageAsync($"{Name} Call Ended");
-                    tcs.SetResult(true);
-                    process.Dispose();
-                };
-
-                ChBotAlert.SendMessageAsync($"Calling {Name} {Number}");
-                process.Start();
-
+                    String sipp = "/app/sipp/sipp";
+                    String timeout = "30s";
+                    String dialplanPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Data/dialplan.xml");
+    
+                    String perms = $"{Host} -au {Username} -ap {Password} -l 1 -m 1 -sf {dialplanPath} -timeout {timeout} -s {Number.Replace(" ", "")}";
+    
+                    var process = new Process
+                    {
+                        StartInfo = { FileName = sipp,
+                                  Arguments = perms,
+                                  UseShellExecute = false
+                                //  RedirectStandardOutput = true,
+                                //  RedirectStandardError = true
+                                 },
+                        EnableRaisingEvents = true
+    
+                    };
+    
+                    process.Exited += (sender, args) =>
+                    {
+                        ChBotAlert.SendMessageAsync($"{Name} Call Ended.");
+                        process.Dispose();
+                    };
+                    
+                    ChBotAlert.SendMessageAsync($"Calling {Name} {Number}");
+                    process.Start();
+                    if (!process.WaitForExit(60000))
+                    {
+                        ChBotAlert.SendMessageAsync($"{Name} Call timed out.");
+                    }
+                });
+                return task;
             }
             catch (Exception ex)
             {
                 if (ChBotAlert!=null) ChBotAlert.SendMessageAsync($"Call error: {ex.Message}");
                 Console.Write("Call error: " + ex.Message);
-                tcs.SetResult(false);
             }
-            return tcs.Task;
+            return null;
         }
     }
 }

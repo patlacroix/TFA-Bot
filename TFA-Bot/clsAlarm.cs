@@ -76,7 +76,7 @@ namespace TFABot
         
         public void Clear(string message = null)
         {
-            if (TimeDiscord.HasValue)
+            if (TimeDiscord.HasValue) //Alarm message has been displayed, so allow clear to be displayed
             {
                 var sb = new StringBuilder();
                 if (String.IsNullOrEmpty(message))
@@ -97,7 +97,8 @@ namespace TFABot
         public void Process()
         {
             if (notificationPolicy!=null)
-            {            
+            {   
+                //Do we need to make a call?         
                 if (Program.AlarmState == Program.EnumAlarmState.On)
                 {
                     if (!TimeCall.HasValue && notificationPolicy.Call>=0 && DateTime.UtcNow > Opened.AddSeconds(notificationPolicy.Call))
@@ -106,7 +107,8 @@ namespace TFABot
                         clsDialler.CallAlertList();
                     }
                 }
-    
+                
+                //Do we need to send Discord a message? 
                 if (Program.AlarmState != Program.EnumAlarmState.Off)
                 {
                     if (!TimeDiscord.HasValue && notificationPolicy.Discord>=0 && DateTime.UtcNow > Opened.AddSeconds(notificationPolicy.Discord))

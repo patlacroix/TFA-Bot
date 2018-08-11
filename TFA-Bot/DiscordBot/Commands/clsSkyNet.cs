@@ -21,12 +21,9 @@ namespace TFABot.DiscordBot.Commands
             e.Channel.SendMessageAsync("Skynet Activated");
         }
         
-        public String HelpString
+        public void HelpString (ref clsColumnDisplay columnDisplay)
         {
-            get
-            {
-                return null;
-            }        
+                return;
         }
     }
 }

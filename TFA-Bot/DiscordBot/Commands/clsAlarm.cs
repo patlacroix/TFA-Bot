@@ -60,18 +60,13 @@ namespace TFABot.DiscordBot.Commands
                 e.Channel.SendMessageAsync($"Alarm State: {AlarmState.ToString()}");
         }
         
-        public String HelpString
+        public void HelpString (ref clsColumnDisplay columnDisplay)
         {
-            get
-            {
-                return 
-@"alarm\tGet state.
-alarm on\tActive.
-alarm off [<int><h,m,s>]\tNo Alarms.
-alarm silent [<int><h,m,s>]\tDiscord warnings only.
-alarm list\tList active alarms.";
-
-            }
+            columnDisplay.AppendCol("alarm","","Get state");
+            columnDisplay.AppendCol("alarm on","","Active");
+            columnDisplay.AppendCol("alarm off","[<int><h,m,s>]","No Alarms.");
+            columnDisplay.AppendCol("alarm silent","[<int><h,m,s>]","Discord warnings only.");
+            columnDisplay.AppendCol("alarm list","","List active alarms.");
         }
     }
 }

@@ -46,21 +46,18 @@ namespace TFABot.Dialler
                                 //  RedirectStandardOutput = true,
                                 //  RedirectStandardError = true
                                  },
-                        EnableRaisingEvents = true
-    
                     };
     
-                    process.Exited += (sender, args) =>
-                    {
-                        ChBotAlert.SendMessageAsync($"{Name} Call Ended.");
-                        process.Dispose();
-                    };
-                    
                     ChBotAlert.SendMessageAsync($"Calling {Name} {Number}");
                     process.Start();
                     if (!process.WaitForExit(60000))
                     {
                         ChBotAlert.SendMessageAsync($"{Name} Call timed out.");
+                    }
+                    else
+                    {
+                        ChBotAlert.SendMessageAsync($"{Name} Call Ended.");
+                        process.Dispose();
                     }
                 });
                 return task;

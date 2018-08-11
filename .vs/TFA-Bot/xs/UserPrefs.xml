@@ -1,20 +1,45 @@
 ﻿<Properties StartupConfiguration="{25609AB4-A77A-4B47-AAB8-B2DB39464A3F}|Default">
   <MonoDevelop.Ide.Workbench ActiveDocument="TFA-Bot Status">
     <Files>
+      <File FileName="TFA-Bot/DiscordBot/Commands/IBotCommand.cs" Line="16" Column="9" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsHelp.cs" Line="22" Column="63" />
+      <File FileName="TFA-Bot/DiscordBot/clsCommands.cs" Line="113" Column="31" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsAlarm.cs" Line="54" Column="65" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsBotControl.cs" Line="64" Column="65" />
+      <File FileName="TFA-Bot/clsColumnDisplay.cs" Line="82" Column="1" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsCall.cs" Line="26" Column="54" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsFembot.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsGitCommand.cs" Line="54" Column="73" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsGoodAfternoon.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsGoodnight.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsListNodes.cs" Line="21" Column="63" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsMTR.cs" Line="82" Column="44" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsSkyNet.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsUsers.cs" Line="37" Column="48" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsVersion.cs" Line="35" Column="2" />
+      <File FileName="TFA-Bot/DataClasses/clsNode.cs" Line="250" Column="114" />
+      <File FileName="TFA-Bot/Program.cs" Line="233" Column="14" />
+      <File FileName="TFA-Bot/Spreadsheet/clsSpreadsheet.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/clsAlarmManager.cs" Line="1" Column="1" />
       <File FileName="TFA-Bot Status" />
-      <File FileName="TFA-Bot/DataClasses/clsNode.cs" Line="66" Column="37" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="TFA-Bot" expanded="True">
             <Node name="TFA-Bot" expanded="True">
+              <Node name="Data" expanded="True" />
               <Node name="DataClasses" expanded="True" />
-              <Node name="DiscordBot" expanded="True">
-                <Node name="clsBotClient.cs" selected="True" />
+              <Node name="Dialler" expanded="True">
+                <Node name="clsDiallerSIP.cs" selected="True" />
               </Node>
+              <Node name="DiscordBot" expanded="True">
+                <Node name="Commands" expanded="True" />
+              </Node>
+              <Node name="Git" expanded="True" />
               <Node name="Properties" expanded="True" />
               <Node name="Spreadsheet" expanded="True" />
+              <Node name="Utils" expanded="True" />
             </Node>
           </Node>
         </State>

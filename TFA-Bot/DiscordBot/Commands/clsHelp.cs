@@ -21,12 +21,9 @@ namespace TFABot.DiscordBot.Commands
         {
               e.Channel.SendMessageAsync(clsCommands.Instance.GetHelpString());
         }
-        public String HelpString
+        public void HelpString (ref clsColumnDisplay columnDisplay)
         {
-            get
-            {
-                return @"help";
-            }
+            columnDisplay.AppendCol("help");
         }        
         
     }

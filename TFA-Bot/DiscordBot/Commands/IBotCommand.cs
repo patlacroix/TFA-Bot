@@ -14,7 +14,7 @@ namespace TFABot.DiscordBot.Commands
     
         void Run(MessageCreateEventArgs e);
         
-        String HelpString {get;}
+        void HelpString (ref clsColumnDisplay columnDisplay);
         
     }
 }

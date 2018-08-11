@@ -27,12 +27,9 @@ namespace TFABot.DiscordBot.Commands
             e.Channel.SendMessageAsync(sb.ToString());
         }
         
-        public String HelpString
+        public void HelpString (ref clsColumnDisplay columnDisplay)
         {
-            get
-            {
-                return "version";
-            }
+            columnDisplay.AppendCol("version");
         }
     }
 }

@@ -21,12 +21,9 @@ namespace TFABot.DiscordBot.Commands
             clsDialler.call(e);
         }
         
-        public String HelpString
+        public void HelpString (ref clsColumnDisplay columnDisplay)
         {
-            get
-            {
-                return @"call <user>";
-            }        
+            columnDisplay.AppendCol("call","<user>");
         }
     }
 }

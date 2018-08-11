@@ -98,43 +98,33 @@ namespace TFABot.DiscordBot
         }
 
 
-        public String GetHelpString(IBotCommand command)
+        public String GetHelpString(IBotCommand command = null)
         {
-            var sb = new StringBuilder();
-            sb.Append("```");
-            HelpString(sb,command);
-            sb.Append("```");
-            return sb.ToString();
-        }
-
-        public String GetHelpString()
-        {
-            var sb = new StringBuilder();
-            sb.Append("```");
-            sb.AppendLine($"The Factoid Authority Bot                             {(DateTime.UtcNow-Program.AppStarted).ToDHMDisplay() }");
-            sb.AppendLine("-----------------------------------------------------------------------");
+            var cd = new clsColumnDisplay();
+            cd.Append("```");
+            cd.ColumnChar=' ';
+            cd.AppendLine($"The Factoid Authority Bot                          Uptime {(DateTime.UtcNow-Program.AppStarted).ToDHMDisplay() }"); 
+            cd.AppendCol("Command");
+            cd.AppendCol("Args");
+            cd.AppendCol("Description");
+             
+            cd.AppendCharLine('-');
             
-            foreach (var command in MatchCommand.Where(x=>x.Item2.HelpString!=null).OrderBy(x=>x.Item1))
+            if (command!=null)
             {
-                HelpString(sb,command.Item2);
+                command.HelpString(ref cd);
             }
-            sb.Append("```");
-            sb.AppendLine(Program.BotURL);
-            return sb.ToString();
-                
-        }
-        
-        void HelpString(StringBuilder sb, IBotCommand command)
-        {
-                foreach (var lines in command.HelpString.Split(new []{'\n'}))
+            else
+            {
+                foreach (var commandItem in MatchCommand.OrderBy(x=>x.Item1))
                 {
-                    var tabSplit = lines.Split(new string[]{@"\t"},2,StringSplitOptions.RemoveEmptyEntries);
-                    sb.Append(tabSplit[0].PadRight(30));
-                    if (tabSplit.Length>1) sb.Append(tabSplit[1]);
-                    sb.AppendLine();
+                    commandItem.Item2.HelpString(ref cd);
+                    cd.NewLine();
                 }
+            }
+            cd.Append("```");
+            cd.Append(Program.BotURL);
+            return cd.ToString();
         }
-        
-        
     }
 }

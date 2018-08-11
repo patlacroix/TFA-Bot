@@ -65,21 +65,15 @@ namespace TFABot.DiscordBot.Commands
             }
 
         }
-        public String HelpString
+        public void HelpString (ref clsColumnDisplay columnDisplay)
         {
-            get
-            {
-                return 
-@"bot         
-bot reload\tReload spreadsheet (app settings require a restart).
-bot update\tUpdate to latest bot version (if available).
-bot restart\tRestart bot.
-bot previous\tSwitch back to previous version (if available).
-bot debug <host:port>\tDebug on remote IDE.
-bot exit\tStop bot. (ends docker instance)";
-            }
-        }        
-        
+            columnDisplay.AppendCol("bot reload","","Reload spreadsheet (app settings require a restart).");
+            columnDisplay.AppendCol("bot update","","Update to latest bot version (if available).");
+            columnDisplay.AppendCol("bot restart","","Restart bot.");
+            columnDisplay.AppendCol("bot previous","","Switch back to previous version (if available).");
+            columnDisplay.AppendCol("bot debug","<host:port>","Debug on remote IDE.");
+            columnDisplay.AppendCol("bot exit","","Stop bot (ends docker instance).");
+        }
         
     }
 }

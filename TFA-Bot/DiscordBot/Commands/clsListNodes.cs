@@ -21,12 +21,9 @@ namespace TFABot.DiscordBot.Commands
             e.Channel.SendMessageAsync($"```{TFABot.Program.GetNodes()}```");
         }
         
-        public String HelpString
+        public void HelpString (ref clsColumnDisplay columnDisplay)
         {
-            get
-            {
-                return @"nodes\tList nodes.";
-            }        
+            columnDisplay.AppendCol("nodes","","List nodes.");
         }
     }
 }

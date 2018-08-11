@@ -77,12 +77,9 @@ namespace TFABot.DiscordBot.Commands
             }
         }
         
-        public String HelpString
+        public void HelpString (ref clsColumnDisplay columnDisplay)
         {
-            get
-            {
-                return @"mtr <ip/host>\tRun mtr test.";
-            }
+            columnDisplay.AppendCol("mtr","<ip/host>","Run mtr test.");
         }        
     }
 }

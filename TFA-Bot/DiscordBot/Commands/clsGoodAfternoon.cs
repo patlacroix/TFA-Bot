@@ -21,12 +21,9 @@ namespace TFABot.DiscordBot.Commands
             e.Channel.SendMessageAsync("Good Afternoon! :sun_with_face:");
         }
         
-        public String HelpString
+        public void HelpString (ref clsColumnDisplay columnDisplay)
         {
-            get
-            {
-                return null;
-            }
+            return;
         }
     }
 }

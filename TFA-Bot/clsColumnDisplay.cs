@@ -16,11 +16,30 @@ namespace TFABot
     
         public int Margin {get; private set;}
     
+    
+        public char ColumnChar {get; set;} = '|';
+        
+    
         public clsColumnDisplay(int margin = 1)
         {
             Margin = margin;
         }
         
+        public void AppendCol(params String[] text)
+        {
+            foreach(var item in text)
+            {
+                AppendCol(item);
+            }
+            
+            while( Columns.Count < colCountMax) //If we have more columms previously, add blanks.
+            {
+                AppendCol("");
+            }
+
+            NewLine();
+        }
+                
         public void AppendCol(String text)
         {
             Columns.Add(text);
@@ -50,7 +69,22 @@ namespace TFABot
         {
             if (Columns.Count==0)
             {
-                Lines[Lines.Count-1] = Lines[Lines.Count-1]+text;
+                if (Lines.Count==0)
+                {
+                    sb.Append(text);
+                }
+                else
+                {
+                    if (Lines[Lines.Count-1] is String[])
+                    {
+                        string[] cols = (string[])Lines[Lines.Count-1];
+                        cols[cols.Length-1] += text;
+                    }
+                    else if (Lines[Lines.Count-1] is String)
+                    {
+                        Lines[Lines.Count-1] = Lines[Lines.Count-1]+text;
+                    }
+                }
             }
             else
             {
@@ -78,7 +112,7 @@ namespace TFABot
                         if (f < ((string[])line).Length)
                         {
                             sb.Append( ((string[])line)[f].PadRight(ColumnMaxLen[f]+Margin));
-                            if (f < colCountMax-1) sb.Append("| ");
+                            if (f < colCountMax-1) sb.Append($"{ColumnChar} ");
                         }
                         else
                         {
@@ -97,7 +131,7 @@ namespace TFABot
                     {
                         sb.Append(new string((char)line,ColumnMaxLen[f]+Margin));
                         if (f>0)sb.Append(line);
-                        if (f < colCountMax-1) sb.Append("|");
+                        if (f < colCountMax-1) sb.Append(ColumnChar);
                     }
                     sb.AppendLine();
                 }

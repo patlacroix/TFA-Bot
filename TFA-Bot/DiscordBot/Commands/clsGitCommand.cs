@@ -48,12 +48,10 @@ namespace TFABot.DiscordBot.Commands
             e.Channel.SendMessageAsync(sb.ToString());
         }
         
-        public String HelpString
+        public void HelpString (ref clsColumnDisplay columnDisplay)
         {
-            get
-            {
-                return "git\ngit <branch/commit>\tCheckout";
-            }
+            columnDisplay.AppendCol("git","","List branche(s)");
+            columnDisplay.AppendCol("git","<branch/commit>","Checkout");
         }
     }
 }

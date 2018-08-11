@@ -31,12 +31,10 @@ namespace TFABot
             sb.Append("```");
             e.Channel.SendMessageAsync(sb.ToString());
         }
-        public String HelpString
+        
+        public void HelpString (ref clsColumnDisplay columnDisplay)
         {
-            get
-            {
-                return @"users\tList users.";
-            }
+            columnDisplay.AppendCol("users","","List users.");
         }        
         
     }

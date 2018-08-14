@@ -70,20 +70,33 @@ namespace DiscordBot
         //Incoming Discord Message
         private async Task MessageCreateEvent(MessageCreateEventArgs e)
         {
-            if (e.Author.IsBot) return;  //Reject our own messages
-            
-            if ( e.Channel == Factom_BotAlert)
+            try
             {
+                if (e.Author.IsBot) return;  //Reject our own messages
                 
-               Our_BotAlert.SendMessageAsync($"#operators-alert:```{e.Message.Content}```");
-               ProcessFactomAlarm(e.Message.Content);
-               return;
+                if ( e.Channel == Factom_BotAlert)
+                {
+                    
+                   Our_BotAlert.SendMessageAsync($"#operators-alert:```{e.Message.Content}```");
+                   ProcessFactomAlarm(e.Message.Content);
+                   return;
+                }
+                
+                if (e.Channel.GuildId == FactomServerID) return;  //Ignore Factom's Discord server
+                            
+                Commands.DiscordMessage(e); //Forward message to commands lookup.
+                
+                if (Our_BotAlert == null )
+                {
+                    e.Channel.SendMessageAsync("WARNING: Your bot alert channel is not found. Check the settings tab for the correct name, and discord permissions");
+                }
+                
+                Console.Write(e.Message);
             }
-            
-            if (e.Channel.GuildId == FactomServerID) return;  //Ignore Factom's Discord server
-                        
-            Commands.DiscordMessage(e); //Forward message to commands lookup.
-            Console.Write(e.Message);
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
         }
         
         public async Task RunAsync()

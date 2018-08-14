@@ -50,7 +50,6 @@ namespace TFABot.DiscordBot
                 {
                     return;
                 }
-        
                 
                 var lowMessage = Message.ToLower();
                 var firstword = lowMessage.Split(new []{' '},2,StringSplitOptions.RemoveEmptyEntries);            
@@ -75,7 +74,6 @@ namespace TFABot.DiscordBot
             }
         }
         
-        
         public void LoadCommandClasses()
         {
             var type = typeof(IBotCommand);
@@ -97,9 +95,10 @@ namespace TFABot.DiscordBot
             }    
         }
 
-
         public String GetHelpString(IBotCommand command = null)
         {
+            try {
+        
             var cd = new clsColumnDisplay();
             cd.Append("```");
             cd.ColumnChar=' ';
@@ -125,6 +124,12 @@ namespace TFABot.DiscordBot
             cd.Append("```");
             cd.Append(Program.BotURL);
             return cd.ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return "";
+            }
         }
     }
 }

@@ -102,7 +102,21 @@ namespace TFABot
             while (u < mainCopyList.Count || s < SList.Count)
             {
                //as both our lists are sorted, we can match them, to see if there are new/missing/matching entries.
-                var match = mainCopyList.Count==0 ? 1 : ((string)indexProperty.GetValue(mainCopyList[u],null)).CompareTo(((string)indexProperty.GetValue(SList[s],null)));
+                int match;
+                if (u >= mainCopyList.Count)  //Nothing to match, so we have a new entry
+                {
+                    match = 1;
+                }
+                else if (s >= SList.Count)  //Exceeded existing list, so we delete
+                {
+                    match = -1;
+                }
+                else
+                {
+                  match = ((string)indexProperty.GetValue(mainCopyList[u],null)).CompareTo(((string)indexProperty.GetValue(SList[s],null)));
+                }
+               
+                
                                         
                 switch (match)
                 {

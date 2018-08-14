@@ -96,10 +96,10 @@ namespace TFABot
             
             if (FullBlockMesured)
             {
-                columnDisplay.AppendCol(LastHeight.HasValue ? $"-{(DateTime.UtcNow - LastHeight.Value).ToMSDisplay()}":"n/a");
-                columnDisplay.AppendCol(NextHeight.HasValue ? $"+{(NextHeight.Value - DateTime.UtcNow).ToMSDisplay()}":"n/a");
+                columnDisplay.AppendCol(LastHeight.HasValue ? $"{(DateTime.UtcNow - LastHeight.Value).ToMSDisplay()}":"n/a");
+                columnDisplay.AppendCol(NextHeight.HasValue ? $"{(NextHeight.Value - DateTime.UtcNow).ToMSDisplay()}":"n/a");
                 
-                if (AverageBlocktime.Count>1)
+                if (AverageBlocktime.Count>0)
                 {
                     columnDisplay.AppendCol($"{new TimeSpan(0,0,AverageBlocktime.CurrentAverage).ToMSDisplay()}");
                 }
@@ -112,7 +112,7 @@ namespace TFABot
             {
                 columnDisplay.AppendCol("n/a");
                 columnDisplay.AppendCol("n/a");
-                columnDisplay.AppendCol("n/a - please wait 1-2 blocks");
+                columnDisplay.AppendCol("n/a - please wait for next block");
             }
         }
     }

@@ -129,6 +129,7 @@
     <Compile Include="Git\clsGitHead.cs" />
     <Compile Include="Git\AssemblyGitCommit.cs" />
     <Compile Include="clsVersion.cs" />
+    <Compile Include="DiscordBot\Commands\clsNetworks.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -165,13 +165,12 @@ namespace DiscordBot
                 {
                     alertChannelString = alertChannelString.ToLower().Replace("#","");
 #if DEBUG
-                    var alertChannel = e.Guild.Channels.FirstOrDefault(x=>x.Name.Contains("bot-in-debug"));
-                    if (alertChannel==null) alertChannel = e.Guild.Channels.FirstOrDefault(x=>x.Name == alertChannelString);
+                    Our_BotAlert = e.Guild.Channels.FirstOrDefault(x=>x.Name.Contains("bot-in-debug"));
+                    if (Our_BotAlert==null) Our_BotAlert = e.Guild.Channels.FirstOrDefault(x=>x.Name == alertChannelString);
 #else
-                    var alertChannel = e.Guild.Channels.FirstOrDefault(x=>x.Name == alertChannelString);
-                    if (alertChannel!=null)
+                    Our_BotAlert = e.Guild.Channels.FirstOrDefault(x=>x.Name == alertChannelString);
+                    if (Our_BotAlert!=null)
                     {
-                       Our_BotAlert = alertChannel;
                        Console.WriteLine($"Our Alert channel: {Our_BotAlert.Name}");
                        if (clsVersion.VersionChangeFlag)
                          Bot.Our_BotAlert.SendMessageAsync($":drum: Welcome to version {clsGitHead.GetHeadToString()} :trumpet:");

@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace TFABot
 {
     public class clsNetwork : ISpreadsheet<clsNetwork>
@@ -23,6 +24,10 @@ namespace TFABot
         public DateTime? NextHeight  {get; private set;}
         int LateHeightCount;
         
+        clsRollingAverage AverageBlocktime = new clsRollingAverage(10);
+        TimeSpan? LastBlockTimeDuration;
+        bool FullBlockMesured = false;
+        
         public clsAlarm NetworkAlarm = null;
         
         public void Update(clsNetwork network)
@@ -43,8 +48,22 @@ namespace TFABot
         public void SetTopHeight(uint height)
         {
             TopHeight = height;
-            LastHeight = DateTime.UtcNow;
-            NextHeight = LastHeight.Value.AddSeconds(BlockTimeSeconds);
+            
+            if (LastHeight.HasValue)
+            {
+                if (FullBlockMesured)
+                {
+                    LastBlockTimeDuration = (DateTime.UtcNow - LastHeight.Value);
+                    AverageBlocktime.Add((int)LastBlockTimeDuration.Value.TotalSeconds);
+                }
+                else
+                {
+                    FullBlockMesured=true;
+                }
+            }
+            
+            LastHeight = DateTime.UtcNow;           
+            NextHeight = LastHeight.Value.AddSeconds( AverageBlocktime.Count > 1 ? AverageBlocktime.CurrentAverage : (int)BlockTimeSeconds );
             
             if (LateHeightCount>0)
             {
@@ -67,6 +86,33 @@ namespace TFABot
                         Program.AlarmManager.New(NetworkAlarm);
                     }
                 }
+            }
+        }
+        
+        public void AppendDisplayColumns(ref clsColumnDisplay columnDisplay)
+        {
+            columnDisplay.AppendCol(Name ?? "?");
+            columnDisplay.AppendCol($"{TopHeight}");
+            
+            if (FullBlockMesured)
+            {
+                columnDisplay.AppendCol(LastHeight.HasValue ? $"-{(DateTime.UtcNow - LastHeight.Value).ToMSDisplay()}":"n/a");
+                columnDisplay.AppendCol(NextHeight.HasValue ? $"+{(NextHeight.Value - DateTime.UtcNow).ToMSDisplay()}":"n/a");
+                
+                if (AverageBlocktime.Count>1)
+                {
+                    columnDisplay.AppendCol($"{new TimeSpan(0,0,AverageBlocktime.CurrentAverage).ToMSDisplay()}");
+                }
+                else
+                {
+                    columnDisplay.AppendCol("n/a");
+                }
+            }
+            else
+            {
+                columnDisplay.AppendCol("n/a");
+                columnDisplay.AppendCol("n/a");
+                columnDisplay.AppendCol("n/a - please wait 1-2 blocks");
             }
         }
     }

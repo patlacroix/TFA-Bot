@@ -87,5 +87,14 @@ public sealed class clsRollingAverage
             this.counts.Clear();
         }
     }
+    
+    public int Count
+    {
+        get
+        {
+            return counts.Count;
+        }
+    }
+    
 }
 }

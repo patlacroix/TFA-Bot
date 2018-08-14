@@ -52,6 +52,11 @@ namespace TFABot
         {
             return $"{(int)ts.TotalHours}h {ts.Minutes}m {ts.Seconds}s";
         }
+        
+        public static string ToMSDisplay(this TimeSpan ts)
+        {
+            return $"{(int)ts.TotalMinutes}m {ts.Seconds}s";
+        }
 
         
     }

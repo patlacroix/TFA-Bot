@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace TFABot
 {
@@ -24,7 +25,7 @@ namespace TFABot
         public DateTime? NextHeight  {get; private set;}
         int LateHeightCount;
         
-        clsRollingAverage AverageBlocktime = new clsRollingAverage(10);
+        clsRollingAverage AverageBlocktime = new clsRollingAverage(6);
         TimeSpan? LastBlockTimeDuration;
         bool FullBlockMesured = false;
         
@@ -63,7 +64,7 @@ namespace TFABot
             }
             
             LastHeight = DateTime.UtcNow;           
-            NextHeight = LastHeight.Value.AddSeconds( AverageBlocktime.Count > 1 ? AverageBlocktime.CurrentAverage : (int)BlockTimeSeconds );
+            NextHeight = LastHeight.Value.AddSeconds( (int)BlockTimeSeconds );
             
             if (LateHeightCount>0)
             {
@@ -89,14 +90,33 @@ namespace TFABot
             }
         }
         
+        public uint MonitoringSources
+        {
+            get
+            {
+                return (uint)Program.NodesList.Values.Count(x=>x.NodeGroup.Network == this && x.Monitor);
+            }
+        }
+        
+        
+        
         public void AppendDisplayColumns(ref clsColumnDisplay columnDisplay)
         {
+        
+            var sources = MonitoringSources;
+        
             columnDisplay.AppendCol(Name ?? "?");
-            columnDisplay.AppendCol($"{TopHeight}");
+            columnDisplay.AppendCol($"{TopHeight:#;;'n/a'}");
             
-            if (FullBlockMesured)
+            if (MonitoringSources==0)
             {
-                columnDisplay.AppendCol(LastHeight.HasValue ? $"{(DateTime.UtcNow - LastHeight.Value).ToMSDisplay()}":"n/a");
+                columnDisplay.AppendCol("n/a");
+                columnDisplay.AppendCol("n/a");
+                columnDisplay.AppendCol("n/a - no data sources availabe");
+            }
+            else if (FullBlockMesured)
+            {
+                columnDisplay.AppendCol(LastHeight.HasValue ? $"{LastHeight.Value:hh:mm:ss}":"n/a");
                 columnDisplay.AppendCol(NextHeight.HasValue ? $"{(NextHeight.Value - DateTime.UtcNow).ToMSDisplay()}":"n/a");
                 
                 if (AverageBlocktime.Count>0)
@@ -107,6 +127,7 @@ namespace TFABot
                 {
                     columnDisplay.AppendCol("n/a");
                 }
+                if (MonitoringSources==1) columnDisplay.Append(" (only one data source)");
             }
             else
             {

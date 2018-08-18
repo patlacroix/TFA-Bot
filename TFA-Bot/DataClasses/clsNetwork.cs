@@ -107,12 +107,13 @@ namespace TFABot
         
             columnDisplay.AppendCol(Name ?? "?");
             columnDisplay.AppendCol($"{TopHeight:#;;'n/a'}");
+            columnDisplay.AppendCol($"{sources}");
             
             if (MonitoringSources==0)
             {
                 columnDisplay.AppendCol("n/a");
                 columnDisplay.AppendCol("n/a");
-                columnDisplay.AppendCol("n/a - no data sources availabe");
+                columnDisplay.AppendCol("n/a - no data sources available");
             }
             else if (FullBlockMesured)
             {

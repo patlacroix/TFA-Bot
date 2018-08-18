@@ -22,6 +22,7 @@ namespace TFABot.DiscordBot.Commands
              
             cd.AppendCol("Network");
             cd.AppendCol("Height");
+            cd.AppendCol("Nodes");
             cd.AppendCol("Last block");
             cd.AppendCol("Next (est)");
             cd.AppendCol("Average time");

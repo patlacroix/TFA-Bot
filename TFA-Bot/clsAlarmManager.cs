@@ -69,5 +69,12 @@ namespace TFABot
             return sb.ToString();
         }
 
-    }
+		internal void Remove(clsAlarm Alarm)
+		{
+			if (Alarm != null && AlarmList.Contains(Alarm))
+            {
+                AlarmList.Remove(Alarm);
+            }
+		}
+	}
 }

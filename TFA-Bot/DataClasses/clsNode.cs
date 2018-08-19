@@ -406,6 +406,15 @@ namespace TFABot
                 HeightLowCount=0;
                 LatencyLowCount=0;
                 RequestFailCount=0;
+                
+                Program.AlarmManager.Remove(AlarmSyncing);
+                Program.AlarmManager.Remove(AlarmHeightLow);
+                Program.AlarmManager.Remove(AlarmLatencyLow);
+                Program.AlarmManager.Remove(AlarmRequestFail);
+                AlarmSyncing=null;
+                AlarmHeightLow=null;
+                AlarmLatencyLow=null;
+                AlarmRequestFail=null;
             }
             PostPopulate();
         }

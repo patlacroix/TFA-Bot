@@ -13,7 +13,6 @@ namespace TFABot
         DateTime Opened = DateTime.UtcNow;
         DateTime? TimeDiscord;
         DateTime? TimeCall;
-        DateTime? Timeout;
         DateTime? DelayUntil;
         public clsNotificationPolicy notificationPolicy;
         

@@ -81,7 +81,17 @@ namespace TFABot
                 var seconds = (DateTime.UtcNow - NextHeight).Value.TotalSeconds;
                 if (seconds>BlockTimeSecondsAllowance)
                 {
-                    if (++LateHeightCount==1)
+                
+                    if (MonitoringSources==0)  //No data sources, so we need to cancel 
+                    {
+                        NextHeight=null;
+                        if (NetworkAlarm!=null)
+                        {
+                           Program.AlarmManager.Remove(NetworkAlarm);
+                           NetworkAlarm = null;
+                        }
+                    }
+                    else if (++LateHeightCount==1)
                     {
                         NetworkAlarm = new clsAlarm(clsAlarm.enumAlarmType.Network,$"WARNING: Network Height {seconds:0} sec late.  {Name} stall or an election?",this);
                         Program.AlarmManager.New(NetworkAlarm);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 
 namespace TFABot
 {
@@ -130,12 +131,16 @@ namespace TFABot
                 columnDisplay.AppendCol(LastHeight.HasValue ? $"{LastHeight.Value:hh:mm:ss}":"n/a");
                 columnDisplay.AppendCol(NextHeight.HasValue ? $"{(NextHeight.Value - DateTime.UtcNow).ToMSDisplay()}":"n/a");
                 
+                var sb = new StringBuilder();
                 foreach (var bt in AverageBlocktime.GetValues().Take(3).Reverse())
                 {
-                    columnDisplay.Append($"{new TimeSpan(0,0,bt).ToMSDisplay()} ");
+                    if (sb.Length>0) sb.Append(" ");
+                    sb.Append(new TimeSpan(0,0,bt).ToMSDisplay());
                 }
                 
-                if (MonitoringSources==1) columnDisplay.Append(" (only one data source)");
+                if (MonitoringSources==1) sb.Append(" (only one data source)");
+                
+                columnDisplay.AppendCol(sb.ToString());
             }
             else
             {

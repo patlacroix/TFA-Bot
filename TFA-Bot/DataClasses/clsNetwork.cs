@@ -134,8 +134,8 @@ namespace TFABot
                 var sb = new StringBuilder();
                 foreach (var bt in AverageBlocktime.GetValues().Take(3).Reverse())
                 {
-                    if (sb.Length>0) sb.Append(" ");
-                    sb.Append(new TimeSpan(0,0,bt).ToMSDisplay());
+                    if (sb.Length>0) sb.Append("<");
+                    sb.Append($"[{new TimeSpan(0,0,bt).ToMSDisplay()}]");
                 }
                 
                 if (MonitoringSources==1) sb.Append(" (only one data source)");

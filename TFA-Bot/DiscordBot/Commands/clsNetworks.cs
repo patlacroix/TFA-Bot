@@ -25,7 +25,7 @@ namespace TFABot.DiscordBot.Commands
             cd.AppendCol("Nodes");
             cd.AppendCol("Last block (utc)");
             cd.AppendCol("Next (est)");
-            cd.AppendCol("Average time (6 blocks)");
+            cd.AppendCol("Previous block times");
              
             cd.AppendCharLine('-');
                 

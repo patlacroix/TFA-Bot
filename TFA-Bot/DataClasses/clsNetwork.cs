@@ -7,7 +7,7 @@ namespace TFABot
     {
         public clsNetwork()
         {
-        
+
         }
         
         [ASheetColumnHeader(true,"name")]
@@ -130,14 +130,11 @@ namespace TFABot
                 columnDisplay.AppendCol(LastHeight.HasValue ? $"{LastHeight.Value:hh:mm:ss}":"n/a");
                 columnDisplay.AppendCol(NextHeight.HasValue ? $"{(NextHeight.Value - DateTime.UtcNow).ToMSDisplay()}":"n/a");
                 
-                if (AverageBlocktime.Count>0)
+                foreach (var bt in AverageBlocktime.GetValues().Take(3).Reverse())
                 {
-                    columnDisplay.AppendCol($"{new TimeSpan(0,0,AverageBlocktime.CurrentAverage).ToMSDisplay()}");
+                    columnDisplay.Append($"{new TimeSpan(0,0,bt).ToMSDisplay()} ");
                 }
-                else
-                {
-                    columnDisplay.AppendCol("n/a");
-                }
+                
                 if (MonitoringSources==1) columnDisplay.Append(" (only one data source)");
             }
             else

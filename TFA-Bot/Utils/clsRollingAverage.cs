@@ -96,5 +96,10 @@ public sealed class clsRollingAverage
         }
     }
     
+    public int[] GetValues()
+    {
+        return counts.ToArray();
+    }
+    
 }
 }

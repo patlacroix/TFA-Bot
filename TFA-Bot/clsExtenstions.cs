@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Text;
 
 namespace TFABot
 {
@@ -58,6 +59,29 @@ namespace TFABot
             return $"{(int)ts.TotalMinutes}m {ts.Seconds}s";
         }
 
+        public static IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> enumerable, Func<T, TKey> keySelector)
+        {
+          return enumerable.GroupBy(keySelector).Select(grp => grp.First());
+        }
         
+        public static string[] SplitAfter(this string text, int len)
+        {
+            List<string> textOut = new List<string>();
+            int pt1 = 0;
+            int pt2 = len;
+            
+            while (pt1 < text.Length)
+            {
+                pt2 = text.IndexOf('\n',pt2);
+                if (pt2 == -1) pt2 = text.Length - 1;
+                
+                textOut.Add(text.Substring(pt1,pt2-pt1));
+                pt1 = pt2 + 1;
+                pt2 = pt1 + len;
+                if (pt2 >= text.Length) pt2 = text.Length;
+            }
+            
+            return textOut.ToArray();
+        }
     }
 }

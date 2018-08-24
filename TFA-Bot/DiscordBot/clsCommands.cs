@@ -100,7 +100,6 @@ namespace TFABot.DiscordBot
             try {
         
             var cd = new clsColumnDisplay();
-            cd.Append("```");
             cd.ColumnChar=' ';
             cd.AppendLine($"The Factoid Authority Bot                          Uptime {(DateTime.UtcNow-Program.AppStarted).ToDHMDisplay() }"); 
             cd.AppendCol("Command");
@@ -115,14 +114,13 @@ namespace TFABot.DiscordBot
             }
             else
             {
-                foreach (var commandItem in MatchCommand.OrderBy(x=>x.Item1))
+                foreach (var commandItem in MatchCommand.DistinctBy(x=>x.Item2).OrderBy(x=>x.Item1))
                 {
                     commandItem.Item2.HelpString(ref cd);
                     cd.NewLine();
                 }
             }
-            cd.Append("```");
-            cd.Append(Program.BotURL);
+            //cd.Append(Program.BotURL);
             return cd.ToString();
             }
             catch (Exception ex)

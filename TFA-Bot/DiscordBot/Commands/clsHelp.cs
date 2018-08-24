@@ -19,7 +19,19 @@ namespace TFABot.DiscordBot.Commands
         
         public void Run(MessageCreateEventArgs e)
         {
-              e.Channel.SendMessageAsync(clsCommands.Instance.GetHelpString());
+            try
+            {
+               var helpText = clsCommands.Instance.GetHelpString();
+               
+               foreach (var text in helpText.SplitAfter(1500))
+               {
+                    e.Channel.SendMessageAsync($"```{text}```");
+               }
+            }
+            catch (Exception ex)
+            {
+               Console.WriteLine(ex.Message);
+            }
         }
         public void HelpString (ref clsColumnDisplay columnDisplay)
         {

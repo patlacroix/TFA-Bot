@@ -104,6 +104,7 @@ namespace TFABot
                     {
                         TimeCall = DateTime.UtcNow;
                         clsDialler.CallAlertList();
+                        clsEmail.EmailAlertList();
                     }
                 }
                 

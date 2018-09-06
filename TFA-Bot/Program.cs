@@ -45,6 +45,7 @@ namespace TFABot
         static public clsBotClient Bot;
         
         static public String BotURL {get; private set;}
+        static public String BotName;
    
         public enum EnumAlarmState { Off, On, Silent }
         
@@ -100,7 +101,8 @@ namespace TFABot
                 var log = Spreadsheet.LoadSettings();
                 Console.WriteLine(log);
                 
-            
+                SettingsList.TryGetValue("BotName", out BotName);
+                
                 String value;            
                 if (SettingsList.TryGetValue("AlarmOffWarningMinutes", out value)) uint.TryParse(value,out AlarmOffWarningMinutes);
     
@@ -110,7 +112,9 @@ namespace TFABot
                     Console.WriteLine("Discord-Token not found");
                     return (int)enumRunState.Error;
                 }
-                 
+                
+                clsEmail.GetSettings(); 
+                   
                 Console.WriteLine("Starting monitoring");
                 const int apiTimeout = 2000;
                 DateTime LastBotStart = DateTime.UtcNow;
@@ -199,11 +203,6 @@ namespace TFABot
                     Bot.Our_BotAlert.SendMessageAsync(message);
         }
         
-        static public void CallAlert()
-        {
-            if (AlarmState == EnumAlarmState.On) clsDialler.CallAlertList();
-        }
-
         static public void SetRunState(enumRunState runState)
         {
             RunState = runState;

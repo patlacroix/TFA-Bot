@@ -5,6 +5,7 @@ using MailKit;
 using MimeKit;
 using DSharpPlus.EventArgs;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace TFABot
 {
@@ -37,47 +38,53 @@ namespace TFABot
         }
         
         
-        static void SendEmail(String To, String Subject, String Message,DSharpPlus.Entities.DiscordChannel ChBotAlert = null)
+        static Task SendEmail(String To, String Subject, String Message,DSharpPlus.Entities.DiscordChannel ChBotAlert = null)
         {
-        
+           Task task = null; 
+           
            if (String.IsNullOrEmpty(SMTPHost))
            {
                 if (ChBotAlert!=null) ChBotAlert.SendMessageAsync($"No SMTP host set up");
-                return;
+                return task;
            }
-        
         
            try
            {
-                var message = new MimeMessage ();
-                message.From.Add (new MailboxAddress (EmailFromAddress));
-                message.To.Add (new MailboxAddress (To));
-                message.Subject = Subject;
-    
-                message.Body = new TextPart ("plain") { Text = Message  };
-    
-                using (var client = new SmtpClient ()) {
-                    // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
-                    client.ServerCertificateValidationCallback = (s,c,h,e) => true;
-    
-                    client.Connect (SMTPHost, SMTPPort, false);
-    
-                    // Note: only needed if the SMTP server requires authentication
-                    client.Authenticate (SMTPUsername, SMTPPassword);
-                    client.Timeout = 2000;
-                    client.Send (message);
-                    client.Disconnect (true);
-                    
-                    if (ChBotAlert!=null)
-                           ChBotAlert.SendMessageAsync($"Sent e-mail {To}");
-                    
-                }
+           
+                task = Task.Run(()=>
+                {
+                    var message = new MimeMessage ();
+                    message.From.Add (new MailboxAddress (EmailFromAddress));
+                    message.To.Add (new MailboxAddress (To));
+                    message.Subject = Subject;
+        
+                    message.Body = new TextPart ("plain") { Text = Message  };
+        
+                    using (var client = new SmtpClient ()) {
+                        // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
+                        client.ServerCertificateValidationCallback = (s,c,h,e) => true;
+        
+                        client.Connect (SMTPHost, SMTPPort, false);
+        
+                        // Note: only needed if the SMTP server requires authentication
+                        client.Authenticate (SMTPUsername, SMTPPassword);
+                        client.Timeout = 10000;
+                        client.Send (message);
+                        client.Disconnect (true);
+                        
+                        if (ChBotAlert!=null)
+                               ChBotAlert.SendMessageAsync($"Sent e-mail {To}");
+                        
+                    }
+                });
             }
             catch (Exception ex)
             {
                 if (ChBotAlert!=null)
                            ChBotAlert.SendMessageAsync($"Send e-mail error {ex.Message}");
             }
+            
+            return task;
         }
         
         

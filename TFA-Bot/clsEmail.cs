@@ -39,6 +39,14 @@ namespace TFABot
         
         static void SendEmail(String To, String Subject, String Message,DSharpPlus.Entities.DiscordChannel ChBotAlert = null)
         {
+        
+           if (String.IsNullOrEmpty(SMTPHost))
+           {
+                if (ChBotAlert!=null) ChBotAlert.SendMessageAsync($"No SMTP host set up");
+                return;
+           }
+        
+        
            try
            {
                 var message = new MimeMessage ();
@@ -75,16 +83,27 @@ namespace TFABot
         
         static public void EmailAlertList()
         {
-            string alarmMessage = $"{Program.BotName} Alarm";
-            foreach (var user in Program.UserList.Values.Where(x=>x.OnDuty))
+        
+            if (!String.IsNullOrEmpty(SMTPHost))
             {
-                SendEmail(user.email,alarmMessage,alarmMessage);
+                string alarmMessage = $"{Program.BotName} Alarm";
+                foreach (var user in Program.UserList.Values.Where(x=>x.OnDuty))
+                {
+                    SendEmail(user.email,alarmMessage,alarmMessage);
+                }
             }
         }
         
         
         static public void email(String names, DSharpPlus.Entities.DiscordChannel ChBotAlert = null)
         {
+        
+        
+            if (String.IsNullOrEmpty(SMTPHost))
+            {
+                if (ChBotAlert!=null) ChBotAlert.SendMessageAsync($"No SMTP host set up");
+                return;
+            }
         
             string alarmMessage = $"{Program.BotName} Alarm (manual Discord request)";
         

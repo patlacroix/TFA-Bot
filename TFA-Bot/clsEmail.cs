@@ -6,6 +6,7 @@ using MimeKit;
 using DSharpPlus.EventArgs;
 using System.Linq;
 using System.Threading.Tasks;
+using MailKit.Security;
 
 namespace TFABot
 {
@@ -64,14 +65,14 @@ namespace TFABot
                         // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
                         client.ServerCertificateValidationCallback = (s,c,h,e) => true;
         
-                        client.Connect (SMTPHost, SMTPPort, false);
+                        client.Connect (SMTPHost, SMTPPort, SecureSocketOptions.Auto );
         
                         // Note: only needed if the SMTP server requires authentication
                         client.Authenticate (SMTPUsername, SMTPPassword);
                         client.Timeout = 10000;
                         client.Send (message);
                         client.Disconnect (true);
-                        
+
                         if (ChBotAlert!=null)
                                ChBotAlert.SendMessageAsync($"Sent e-mail {To}");
                         
@@ -94,7 +95,7 @@ namespace TFABot
             if (!String.IsNullOrEmpty(SMTPHost))
             {
                 string alarmMessage = $"{Program.BotName} Alarm";
-                foreach (var user in Program.UserList.Values.Where(x=>x.OnDuty))
+                foreach (var user in Program.UserList.Values.Where(x=>x.OnDuty && !String.IsNullOrEmpty(x.email)))
                 {
                     SendEmail(user.email,alarmMessage,alarmMessage);
                 }

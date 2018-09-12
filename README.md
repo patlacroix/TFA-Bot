@@ -19,7 +19,7 @@ https://docs.google.com/spreadsheets/d/19SLbCQLFKpkSaZ88SAmN_Mg8L8M-TkiB67TJD67l
 
 ```
 docker build -t tfa-bot https://git.factoid.org/TFA/TFA-Bot.git
-docker run --rm -d -e "BOTURL=https://docs.google.com/spreadsheets/d/123456789123456789123456789123456789/edit?usp=sharing" --name bot tfa-bot
+docker run --restart=always -d -e "BOTURL=https://docs.google.com/spreadsheets/d/123456789123456789123456789123456789/edit?usp=sharing" --name bot tfa-bot
 ```
 
 ##### Optional SIP Server, for Phone Call alerts

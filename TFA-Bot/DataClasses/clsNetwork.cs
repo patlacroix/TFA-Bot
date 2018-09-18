@@ -128,7 +128,7 @@ namespace TFABot
             }
             else if (FullBlockMesured)
             {
-                columnDisplay.AppendCol(LastHeight.HasValue ? $"{LastHeight.Value:hh:mm:ss}":"n/a");
+                columnDisplay.AppendCol(LastHeight.HasValue ? $"{LastHeight.Value:HH:mm:ss}":"n/a");
                 columnDisplay.AppendCol(NextHeight.HasValue ? $"{(NextHeight.Value - DateTime.UtcNow).ToMSDisplay()}":"n/a");
                 
                 var sb = new StringBuilder();

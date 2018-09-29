@@ -227,7 +227,7 @@ namespace DiscordBot
                     if (emergency && keyword=="E" || (keyword !="E" && message.Contains(keyword)))
                     {
                         if (!keywordUsed.Contains(keyword)) keywordUsed.Add(keyword);
-                        if (!toCall.Contains(user.Name))  toCall.Add(user.Name);
+                        if (!toCall.Contains(user.Name)) toCall.Add(user.Name);
                     }
                 }
             }
@@ -247,6 +247,7 @@ namespace DiscordBot
             foreach (var userName in toCall)
             {
                 clsDialler.call(userName);
+                clsEmail.email(userName);
             }
             
         }

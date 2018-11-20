@@ -216,30 +216,39 @@ namespace DiscordBot
         void ProcessFactomAlarm(String message)
         {
             bool emergency = message.Contains("EMERGENCY");
+            var messageSplit = message.Split(' ');
             
             List<string> keywordUsed = new List<string>();
             List<string> toCall = new List<string>();
             
+            //Loop through all OnDuty users
             foreach(var user in Program.UserList.Values.Where(x=>x.KeywordAlert!=null && x.OnDuty))
             {
-                foreach (var keyword in user.KeywordAlert)
+                foreach (var word in messageSplit)
                 {
-                    if (emergency && keyword=="E" || (keyword !="E" && message.Contains(keyword)))
+                    foreach (var keyword in user.KeywordAlert)
                     {
-                        if (!keywordUsed.Contains(keyword)) keywordUsed.Add(keyword);
-                        if (!toCall.Contains(user.Name)) toCall.Add(user.Name);
+                        if (emergency && keyword=="E" || (keyword !="E" && word == keyword))
+                        {
+                            if (!keywordUsed.Contains(keyword)) keywordUsed.Add(keyword);
+                            if (!toCall.Contains(user.Name)) toCall.Add(user.Name);
+                        }
                     }
                 }
             }
             
+            //Loop through OffDuty users, triggering keywords that have not been picked up by OnDuty users
             foreach(var user in Program.UserList.Values.Where(x=>x.KeywordAlert!=null && !x.OnDuty))
             {
-                foreach (var keyword in user.KeywordAlert.Where(x=>!keywordUsed.Contains(x)))
+                foreach (var word in messageSplit)
                 {
-                    if (emergency && keyword=="E" || (keyword !="E" && message.Contains(keyword)))
+                    foreach (var keyword in user.KeywordAlert.Where(x=>!keywordUsed.Contains(x)))
                     {
-                        if (!keywordUsed.Contains(keyword)) keywordUsed.Add(keyword);
-                        if (!toCall.Contains(user.Name)) toCall.Add(user.Name);
+                        if (emergency && keyword=="E" || (keyword !="E" && word == keyword))
+                        {
+                            if (!keywordUsed.Contains(keyword)) keywordUsed.Add(keyword);
+                            if (!toCall.Contains(user.Name)) toCall.Add(user.Name);
+                        }
                     }
                 }
             }

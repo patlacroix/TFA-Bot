@@ -167,7 +167,16 @@ namespace TFABot
         {
             try {
                 
-                var client = new RestClient($"http://{Host}:8088");
+                RestClient client;
+                if (Host.Contains(":"))
+                {
+                    client = new RestClient($"http://{Host}");
+                }
+                else
+                {
+                    client = new RestClient($"http://{Host}:8088");
+                }
+
                         
                 client.Timeout = timeout;                    
                         
@@ -268,8 +277,17 @@ namespace TFABot
         public void GetVersion(int timeout = 2000)
         {
             try {
-                var client = new RestClient($"http://{Host}:8088");
-                        
+                
+                RestClient client;
+                if (Host.Contains(":"))
+                {
+                    client = new RestClient($"http://{Host}");
+                }
+                else
+                {
+                    client = new RestClient($"http://{Host}:8088");
+                }
+                                
                 client.Timeout = timeout;                    
                         
                 var request = new RestRequest("v2", Method.POST);

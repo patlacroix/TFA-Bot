@@ -2,27 +2,27 @@
   <MonoDevelop.Ide.ItemProperties.TFA-Bot PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="TFA-Bot Status">
     <Files>
-      <File FileName="TFA-Bot/DiscordBot/Commands/clsNetworks.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsNetworks.cs" Line="1" Column="10" />
       <File FileName="TFA-Bot/DiscordBot/Commands/clsListNodes.cs" Line="1" Column="1" />
-      <File FileName="TFA-Bot/DataClasses/clsNode.cs" Line="29" Column="25" />
-      <File FileName="TFA-Bot/DataClasses/clsNetwork.cs" Line="50" Column="21" />
-      <File FileName="TFA-Bot/clsExtenstions.cs" Line="84" Column="38" />
-      <File FileName="TFA-Bot/DataClasses/clsNodeGroup.cs" Line="51" Column="43" />
-      <File FileName="TFA-Bot/DiscordBot/Commands/clsEmail.cs" Line="16" Column="44" />
-      <File FileName="TFA-Bot/DiscordBot/clsCommands.cs" Line="72" Column="1" />
-      <File FileName="TFA-Bot/DataClasses/clsSetting.cs" Line="28" Column="1" />
-      <File FileName="TFA-Bot/DataClasses/clsNotificationPolicy.cs" Line="30" Column="23" />
-      <File FileName="TFA-Bot/Spreadsheet/clsSpreadsheetReader.cs" Line="105" Column="1" />
-      <File FileName="TFA-Bot/Program.cs" Line="205" Column="9" />
-      <File FileName="TFA-Bot/Spreadsheet/ISpreadsheet.cs" Line="7" Column="14" />
-      <File FileName="TFA-Bot/Dialler/clsDialler.cs" Line="81" Column="83" />
-      <File FileName="TFA-Bot/DiscordBot/Commands/clsCall.cs" Line="21" Column="24" />
-      <File FileName="TFA-Bot/Dialler/clsDiallerSIP.cs" Line="53" Column="48" />
-      <File FileName="TFA-Bot/clsAlarm.cs" Line="113" Column="18" />
-      <File FileName="TFA-Bot/Dialler/clsDiallerTwilio.cs" Line="14" Column="25" />
-      <File FileName="TFA-Bot/DiscordBot/clsBotClient.cs" Line="249" Column="43" />
-      <File FileName="TFA-Bot/DiscordBot/Commands/clsMTR.cs" Line="34" Column="37" />
-      <File FileName="TFA-Bot/Dialler/IDialler.cs" Line="9" Column="14" />
+      <File FileName="TFA-Bot/DataClasses/clsNetwork.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/clsExtenstions.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DataClasses/clsNodeGroup.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsEmail.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DiscordBot/clsCommands.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DataClasses/clsSetting.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DataClasses/clsNotificationPolicy.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/Spreadsheet/clsSpreadsheetReader.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/Program.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/Spreadsheet/ISpreadsheet.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/Dialler/clsDialler.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsCall.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/Dialler/clsDiallerSIP.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/clsAlarm.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/Dialler/clsDiallerTwilio.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DiscordBot/clsBotClient.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DiscordBot/Commands/clsMTR.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/Dialler/IDialler.cs" Line="1" Column="1" />
+      <File FileName="TFA-Bot/DataClasses/clsNode.cs" Line="170" Column="35" />
       <File FileName="TFA-Bot Status" />
     </Files>
   </MonoDevelop.Ide.Workbench>

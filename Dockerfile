@@ -1,44 +1,51 @@
-FROM ubuntu:18.04
+FROM mono:5.16.0.179 AS build
 
-ARG BRANCH="master"
+ARG SIPP_BRANCH="v3.5.2"
+ARG BOT_BRANCH="master"
 
-# Set the timezone.
 ENV TZ=UTC
-RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime
 
+RUN set -xe && \
+  groupadd -g 999 tfa-bot && \
+  useradd -r -m -u 999 -g tfa-bot tfa-bot && \
+  apt-get update && \
+  apt-get --no-install-recommends -y install \
+    autoconf \
+    automake \
+    build-essential \
+    git \
+    iputils-ping \
+    libncurses5-dev \
+    libncursesw5-dev \
+    locales \
+    locales-all \
+    mtr-tiny \
+    net-tools \
+    ssh \
+    wget && \
+  apt-get autoremove --purge && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* && \
+  cd /home/tfa-bot && \
+  git clone --branch ${SIPP_BRANCH} https://github.com/SIPp/sipp.git && \
+  wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe && \
+  git clone -b ${BOT_BRANCH} https://git.factoid.org/TFA/TFA-Bot.git && \
+  cd /home/tfa-bot/sipp && \
+  ./build.sh && \
+  cd /home/tfa-bot//TFA-Bot && \
+  mono ../nuget.exe restore TFA-Bot.sln && \
+  msbuild -p:Configuration=Release -property:GitCommit=$(git rev-parse HEAD) TFA-Bot.sln && \
+  ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime && \
+  ln -fs /home/tfa-bot /app && \
+  cp /home/tfa-bot/TFA-Bot/entrypoint.sh / && \
+  chown -R tfa-bot:tfa-bot /home/tfa-bot && \
+  chmod +x /entrypoint.sh
 
-RUN apt-get update \
-	&& apt-get -y install joe less gnupg ssh wget curl net-tools iputils-ping libncurses5-dev autoconf libncursesw5-dev git locales locales-all mtr-tiny
+USER tfa-bot
 
+WORKDIR /
 
-##RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-##RUN echo "deb http://download.mono-project.com/repo/ubuntu stable-xenial main" | tee /etc/apt/sources.list.d/mono-official-stable.list
-
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-RUN echo "deb http://download.mono-project.com/repo/ubuntu stable-bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list
-
-RUN apt-get update \
-    && apt-get -y install mono-devel
-
-RUN mkdir -p /app
-WORKDIR /app
-RUN git clone --branch v3.5.2 https://github.com/SIPp/sipp.git
-WORKDIR /app/sipp
-RUN ./build.sh
-
-WORKDIR /app
-RUN git clone -b ${BRANCH} https://git.factoid.org/TFA/TFA-Bot.git
-RUN wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-WORKDIR /app/TFA-Bot
-RUN mono ../nuget.exe restore TFA-Bot.sln
-RUN msbuild -p:Configuration=Release -property:GitCommit=$(git rev-parse HEAD) TFA-Bot.sln
-
-RUN apt-get clean
-RUN rm -rf /var/lib/apt/lists/*
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-
-#ENTRYPOINT ["/bin/bash"]
 ENTRYPOINT ["/entrypoint.sh"]
+
+# mono doesn't seem to respond to the SIGTERM, so...
+STOPSIGNAL SIGKILL

@@ -36,6 +36,7 @@ namespace TFABot.Dialler
             {
                 return Task.Run(() => {
                 
+                    Console.WriteLine($"Calling via Twilio: {Name} ({Number})");
                     Number = String.Join("", Number.Split('(', ')' ,'-' ,' '));
                 
                     var client = new RestClient($"https://api.twilio.com/2010-04-01/Accounts/{Username}");

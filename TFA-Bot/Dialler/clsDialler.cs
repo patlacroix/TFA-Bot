@@ -53,6 +53,7 @@ namespace TFABot
                 if (Dialler==null)
                 {
                     if (ChBotAlert == null) ChBotAlert = clsBotClient.Instance.Our_BotAlert;
+                    Console.WriteLine("SIP not set up");
                     ChBotAlert.SendMessageAsync("SIP not set up");
                     return;
                 }

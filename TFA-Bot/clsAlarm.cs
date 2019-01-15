@@ -52,6 +52,7 @@ namespace TFABot
                 case enumAlarmType.Network:
                     Program.NotificationPolicyList.TryGetValue(Node.NodeGroup.NetworkString,out notificationPolicy); break;
             }
+            Console.WriteLine("new clsAlarm: " + sb.ToString());
         }
         
         //New alarm
@@ -89,6 +90,7 @@ namespace TFABot
                 }
                 Notes.Clear();
                 
+                Console.WriteLine("clsAlarm.Clear: " + sb.ToString());
                 clsBotClient.Instance.Our_BotAlert.SendMessageAsync(sb.ToString());
             }
         }
@@ -102,6 +104,7 @@ namespace TFABot
                 {
                     if (!TimeCall.HasValue && notificationPolicy.Call>=0 && DateTime.UtcNow > Opened.AddSeconds(notificationPolicy.Call))
                     {
+                        Console.WriteLine("clsAlarm.Process/ActivateCallNotif: " + sb.ToString());
                         TimeCall = DateTime.UtcNow;
                         clsDialler.CallAlertList();
                         clsEmail.EmailAlertList();
@@ -116,6 +119,7 @@ namespace TFABot
                         TimeDiscord = DateTime.UtcNow;
                         var sb = new StringBuilder();
                         sb.AppendLine(Message);
+                        Console.WriteLine("clsAlarm.Process/ActivateDiscordNotif: " + sb.ToString());
                         foreach( var line in Notes)
                         {
                             sb.AppendLine(line);
